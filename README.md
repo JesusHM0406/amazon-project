@@ -8,4 +8,4 @@ In this repository, i will share my process making a simple copy of Amazon websi
 
 ## This project is under MIT LICENSE
 
-Look the [https://github.com/JesusHM0406/amazon-project/blob/main/LICENSE](LICENSE) file for more detail.
+Look the [LICENSE](LICENSE) file for more detail.
