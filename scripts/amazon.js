@@ -58,5 +58,11 @@ addToCartBtns.forEach((btn)=>{
 
     if(matchedProduct) matchedProduct.quantity += quantityToAdd;
     else cart.push({ product: productId, quantity: quantityToAdd });
+
+    const cartQuantity = cart.reduce((acc, act)=>{ return acc + act.quantity },0);
+
+    document.querySelector('.cart-quantity').textContent = cartQuantity;
+
+    document.querySelector(`.select-${productId}`).value = 1;
   });
 });
