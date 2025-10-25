@@ -14,7 +14,7 @@ export function addToCart(productId,timeoutId){
   let matchedProduct = cart.find(item=> item.productId === productId);
 
   if(matchedProduct) matchedProduct.quantity += quantityToAdd;
-  else cart.push({ productId, quantity: quantityToAdd });
+  else cart.push({ productId, quantity: quantityToAdd, deliveryId: '1' });
 
   const cartQuantity = calculateCartQuantity();
 
@@ -31,3 +31,11 @@ export function addToCart(productId,timeoutId){
 
   saveStorage();
 };
+
+export function updateDeliveryOption(productId,deliveryId){
+  const matchedProduct = cart.find(cartItem=>cartItem.productId === productId);
+  if (matchedProduct){
+    matchedProduct.deliveryId = deliveryId;
+    saveStorage();
+  }
+}
