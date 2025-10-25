@@ -1,4 +1,4 @@
-export const cart = JSON.parse(localStorage.getItem('cart')) || [{}];
+export const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function saveStorage(){
   localStorage.setItem('cart',JSON.stringify(cart));
@@ -11,10 +11,10 @@ export function calculateCartQuantity(){
 export function addToCart(productId,timeoutId){
   const quantityToAdd = Number(document.querySelector(`.select-${productId}`).value);
   const addedMessage = document.querySelector(`.added-${productId}`);
-  let matchedProduct = cart.find(item=> item.product === productId);
+  let matchedProduct = cart.find(item=> item.productId === productId);
 
   if(matchedProduct) matchedProduct.quantity += quantityToAdd;
-  else cart.push({ product: productId, quantity: quantityToAdd });
+  else cart.push({ productId, quantity: quantityToAdd });
 
   const cartQuantity = calculateCartQuantity();
 
