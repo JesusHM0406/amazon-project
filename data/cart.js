@@ -39,3 +39,9 @@ export function updateDeliveryOption(productId,deliveryId){
     saveStorage();
   }
 }
+
+export function updateCartItemQuantity(productId, newQuantity){
+  const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
+  matchedProduct.quantity = newQuantity;
+  saveStorage();
+}

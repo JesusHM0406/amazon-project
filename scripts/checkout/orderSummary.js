@@ -1,7 +1,8 @@
-import { cart, updateDeliveryOption } from "../../data/cart.js";
+import { cart, updateDeliveryOption, updateCartItemQuantity,calculateCartQuantity } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { deliveryOptions } from "../../data/deliverOptions.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
+import { renderHeader } from "../checkout.js";
 
 export function renderOrderSummary(){
   let orderSummaryHTML = '';
@@ -28,10 +29,14 @@ export function renderOrderSummary(){
 
             <div class="product-quantity">
               <span>
-                Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+                Quantity: <span class="quantity-label quantity-label-${matchedProduct.id}">${cartItem.quantity}</span>
               </span>
 
               <span class="update-quantity-link link-primary">Update</span>
+              <div class="updating-quantity-container">
+                <input type="number" class="quantity-input" min="1">
+                <span class="save-quantity-link link-primary" data-product-id="${matchedProduct.id}">Save</span>
+              </div>
 
               <span class="delete-quantity-link link-primary">Delete</span>
             </div>
@@ -83,6 +88,31 @@ export function renderOrderSummary(){
       const { productId,deliveryId } = option.dataset;
       updateDeliveryOption(productId, deliveryId);
       renderOrderSummary();
+    });
+  });
+
+  document.querySelectorAll('.update-quantity-link').forEach(link=>{
+    link.addEventListener('click',()=>{
+      link.closest('.cart-item-container').classList.add('is-editing');
+    });
+  });
+
+  document.querySelectorAll('.save-quantity-link').forEach(link=>{
+    link.addEventListener('click',()=>{
+      let newQuantity = Number(link.previousElementSibling.value);
+      const { productId } = link.dataset;
+      const quantityLabel = document.querySelector(`.quantity-label-${productId}`);
+      const originalValue = Number(quantityLabel.textContent);
+
+      if(newQuantity <= 0){
+        newQuantity = originalValue;
+      }
+
+      updateCartItemQuantity(productId, newQuantity);
+
+      quantityLabel.textContent = newQuantity;
+      link.closest('.cart-item-container').classList.remove('is-editing');
+      renderHeader();
     });
   });
 };
