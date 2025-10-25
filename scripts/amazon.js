@@ -1,3 +1,6 @@
+import {products} from "../data/products.js";
+import {addToCart, calculateCartQuantity} from "../data/cart.js";
+
 const docFragment = document.createDocumentFragment();
 
 products.forEach(item => {
@@ -54,24 +57,8 @@ addToCartBtns.forEach((btn)=>{
   let timeoutId;
   btn.addEventListener('click',()=>{
     const { productId } = btn.dataset;
-    const quantityToAdd = Number(document.querySelector(`.select-${productId}`).value);
-    const addedMessage = document.querySelector(`.added-${productId}`);
-    let matchedProduct = cart.find(item=> item.product === productId);
-
-    if(matchedProduct) matchedProduct.quantity += quantityToAdd;
-    else cart.push({ product: productId, quantity: quantityToAdd });
-
-    const cartQuantity = cart.reduce((acc, act)=>{ return acc + act.quantity },0);
-
-    addedMessage.classList.add('added-visible');
-    if(timeoutId) clearTimeout(timeoutId);
-
-    timeoutId = setTimeout(()=>{
-      addedMessage.classList.remove('added-visible');
-    },2000);
-
-    document.querySelector('.cart-quantity').textContent = cartQuantity;
-
-    document.querySelector(`.select-${productId}`).value = 1;
+    addToCart(productId, timeoutId);
   });
 });
+
+document.querySelector('.cart-quantity').textContent = calculateCartQuantity();
