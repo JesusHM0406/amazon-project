@@ -10,3 +10,15 @@ function isWeekend(date){
   const date = date.format('dddd');
   return date === 'Sunday' || date === 'Saturday';
 }
+
+export function calculateDeliveryDate(option){
+  let deliveryDate = dayjs();
+  const remainingWorkDays = option.days;
+
+  while (remainingWorkDays > 0){
+    deliveryDate = deliveryDate.add(1,'days');
+    if (!isWeekend(deliveryDate)) remainingWorkDays--;
+  }
+
+  return deliveryDate.format('dddd, MMMM D');
+}
