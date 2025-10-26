@@ -19,4 +19,6 @@ function renderPaymentSummary(){
   const taxCents = beforeTaxCents*0.1;
   const totalCents = beforeTaxCents + taxCents;
   const total = formatCurency(totalCents);
+
+  const cartQuantity = calculateCartQuantity();
 }
