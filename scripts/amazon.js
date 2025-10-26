@@ -19,7 +19,7 @@ products.forEach(item => {
       <div class="product-rating-count link-primary">${item.rating.count}</div>
     </div>
 
-    <div class="product-price">${(item.priceCents / 100).toFixed(2)}</div>
+    <div class="product-price">$ ${(item.priceCents / 100).toFixed(2)}</div>
 
     <div class="product-quantity-container">
       <select class='select-${item.id}'>
