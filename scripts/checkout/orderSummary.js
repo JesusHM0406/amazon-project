@@ -1,6 +1,6 @@
 import { cart, updateDeliveryOption, updateCartItemQuantity, removeFromCart } from "../../data/cart.js";
 import { products } from "../../data/products.js";
-import { deliveryOptions } from "../../data/deliverOptions.js";
+import { calculateDeliveryDate, deliveryOptions } from "../../data/deliverOptions.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 import { renderHeader } from "../checkout.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
@@ -62,9 +62,7 @@ export function renderOrderSummary(){
       const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
 
       if(matchedProduct){
-        const today = dayjs();
-        let deliveryDate = today.add(option.days, 'days');
-        deliveryDate = deliveryDate.format('dddd, MMMM D');
+        let deliveryDate = calculateDeliveryDate(option);
         const matchedOption = matchedProduct.deliveryId;
         const priceString = option.priceCents === 0 ? 'FREE' : `$${option.priceCents / 100} -`;
 
