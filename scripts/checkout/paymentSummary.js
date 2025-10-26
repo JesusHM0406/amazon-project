@@ -11,7 +11,7 @@ export function renderPaymentSummary(){
     const matchedProduct = products.find(product => product.id === cartItem.productId);
     const deliveryOption = deliveryOptions.find(option => option.id === cartItem.deliveryId);
 
-    priceCents += matchedProduct.priceCents;
+    priceCents += matchedProduct.priceCents * cartItem.quantity;
     shippingPriceCents += deliveryOption.priceCents;
   });
 
