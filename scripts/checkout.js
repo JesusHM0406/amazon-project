@@ -1,4 +1,5 @@
 import { renderOrderSummary } from "./checkout/orderSummary.js";
+import { renderPaymentSummary } from "./checkout/paymentSummary.js";
 import { calculateCartQuantity } from "../data/cart.js";
 
 export function renderHeader(){
@@ -6,4 +7,5 @@ export function renderHeader(){
 }
 
 renderHeader();
+renderPaymentSummary();
 renderOrderSummary();

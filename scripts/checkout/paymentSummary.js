@@ -3,13 +3,13 @@ import { deliveryOptions } from "../../data/deliverOptions.js";
 import { products } from "../../data/products.js";
 import { formatCurency } from "../utils/money.js";
 
-function renderPaymentSummary(){
+export function renderPaymentSummary(){
   let priceCents = 0;
   let shippingPriceCents = 0;
 
   cart.forEach(cartItem => {
     const matchedProduct = products.find(product => product.id === cartItem.productId);
-    const deliveryOption = deliveryOptions.find(option => option.id === matchedProduct.id);
+    const deliveryOption = deliveryOptions.find(option => option.id === cartItem.deliveryId);
 
     priceCents += matchedProduct.priceCents;
     shippingPriceCents += deliveryOption.priceCents;
@@ -54,4 +54,6 @@ function renderPaymentSummary(){
       Place your order
     </button>
   `;
+
+  document.querySelector('.payment-summary').innerHTML = paymentSummaryHTML;
 }
