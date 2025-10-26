@@ -7,8 +7,8 @@ export const deliveryOptions = [
 ];
 
 function isWeekend(date){
-  const date = date.format('dddd');
-  return date === 'Sunday' || date === 'Saturday';
+  const dateFormated = date.format('dddd');
+  return dateFormated === 'Sunday' || dateFormated === 'Saturday';
 }
 
 export function calculateDeliveryDate(option){
