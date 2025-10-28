@@ -3,7 +3,22 @@ export let cart;
 loadFromStorage();
 
 export function loadFromStorage(){
-  cart = JSON.parse(localStorage.getItem('cart')) || [];
+  try{
+    let cartJson = localStorage.getItem('cart');
+
+    if(cartJson){
+      cart = JSON.parse(cartJson);
+    } else {
+      cart = [];
+    }
+  } catch(e){
+    console.log('Error: not valid JSON, resetting the cart ', e);
+    cart = [];
+  }
+
+  if(!Array.isArray(cart)){
+    cart = [];
+  }
 }
 
 function saveStorage(){
