@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity, Persistance,  cartHelpers } from "../../data/cart.js";
+import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart } from "../../data/cart.js";
 
 if(jasmine.clock().installed){
   jasmine.clock().uninstall();
@@ -179,7 +179,6 @@ describe('displayAddedMessage',()=>{
   });
 });
 
-
 describe('updateUI',()=>{
 
   beforeEach(()=>{
@@ -220,4 +219,52 @@ describe('updateUI',()=>{
   it('resets select value to 1',()=>{
     expect(document.querySelector('.select-123').value).toEqual('1');
   })
-})
+});
+
+describe('addToCart (orchetador)',()=>{
+  beforeEach(()=>{
+    spyOn(cartHelpers, 'updateCart');
+    spyOn(cartHelpers, 'displayAddedMessage');
+    spyOn(cartHelpers, 'updateUI');
+  });
+
+  afterEach(()=>{
+    document.querySelector('.tests-container').innerHTML = '';
+  })
+
+  it('calls the other functions in order',()=>{
+    document.querySelector('.tests-container').innerHTML = `
+      <div class="cart-quantity"></div>
+      <select class='select-123'>
+        <option selected value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+    `;
+
+    addToCart('123', 1);
+
+    expect(cartHelpers.updateCart).toHaveBeenCalledBefore(cartHelpers.displayAddedMessage);
+    expect(cartHelpers.updateCart).toHaveBeenCalledBefore(cartHelpers.updateUI);
+
+    expect(cartHelpers.displayAddedMessage).toHaveBeenCalledBefore(cartHelpers.updateUI);
+  });
+
+  it('do nothing if the quantity is invalid',()=>{
+    document.querySelector('.tests-container').innerHTML = `
+      <div class="cart-quantity"></div>
+      <input type="text" class="select-123" value="hello">
+    `;
+
+    addToCart('123', 1);
+
+    expect(cartHelpers.updateCart).not.toHaveBeenCalled();
+  });
+});
