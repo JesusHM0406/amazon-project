@@ -25,39 +25,39 @@ export const Persistance = {
 
 Persistance.loadFromStorage();
 
+export const cartHelpers = {
+  updateCart(productId,quantity){
+    const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
+
+    if(quantity === 0) return;
+
+    if(matchedProduct){
+      matchedProduct.quantity += quantity; 
+    } else{
+      cart.push({productId, quantity, deliveryId: '1'})
+    }
+    Persistance.saveStorage();  
+  },
+  displayAddedMessage(productId, timeoutId){
+    const addedMessage = document.querySelector(`.added-${productId}`);
+
+    addedMessage.classList.add('added-visible');
+    if(timeoutId) clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(()=>{
+      addedMessage.classList.remove('added-visible');
+    },1000);
+  },
+  updateUI(productId){
+    document.querySelector('.cart-quantity').textContent = calculateCartQuantity();
+
+    document.querySelector(`.select-${productId}`).value = 1;
+  }
+};
+
 export function calculateCartQuantity(){
   return cart.reduce((acc, act)=>{ return acc + act.quantity },0);
-}
-
-export function updateCart(productId,quantity){
-  const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
-
-  if(quantity === 0) return;
-
-  if(matchedProduct){
-    matchedProduct.quantity += quantity; 
-  } else{
-    cart.push({productId, quantity, deliveryId: '1'})
-  }
-  Persistance.saveStorage();  
-}
-
-export function displayAddedMessage(productId, timeoutId){
-  const addedMessage = document.querySelector(`.added-${productId}`);
-
-  addedMessage.classList.add('added-visible');
-  if(timeoutId) clearTimeout(timeoutId);
-
-  timeoutId = setTimeout(()=>{
-    addedMessage.classList.remove('added-visible');
-  },1000);
-}
-
-export function updateUI(productId){
-  document.querySelector('.cart-quantity').textContent = calculateCartQuantity();
-
-  document.querySelector(`.select-${productId}`).value = 1;
-}
+};
 
 export function addToCart(productId,timeoutId){
   try {
@@ -67,11 +67,11 @@ export function addToCart(productId,timeoutId){
       throw new Error('Please enter a valid number')
     }
 
-    updateCart(productId,quantityToAdd);
+    cartHelpers.updateCart(productId,quantityToAdd);
 
-    displayAddedMessage(productId,timeoutId);
+    cartHelpers.displayAddedMessage(productId,timeoutId);
 
-    updateUI(productId);
+    cartHelpers.updateUI(productId);
   } catch(e){
     console.log(e);
   }

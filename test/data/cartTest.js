@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity, Persistance,  updateCart, displayAddedMessage, updateUI } from "../../data/cart.js";
+import { cart, calculateCartQuantity, Persistance,  cartHelpers } from "../../data/cart.js";
 
 if(jasmine.clock().installed){
   jasmine.clock().uninstall();
@@ -104,7 +104,7 @@ describe('updateCart',()=>{
   });
 
   it('adds a new product with the correct quantity and deliveryId equal to \'1\' as default',()=>{
-    updateCart('456',1);
+    cartHelpers.updateCart('456',1);
 
     expect(cart.length).toEqual(3);
     expect(cart).toEqual([
@@ -116,7 +116,7 @@ describe('updateCart',()=>{
   });
 
   it('modify the quantity of a existing product',()=>{
-    updateCart('321',1);
+    cartHelpers.updateCart('321',1);
 
     expect(cart.length).toEqual(2);
     expect(cart).toEqual([
@@ -127,7 +127,7 @@ describe('updateCart',()=>{
   });
 
   it('doesn\'t add a new product if the quantity is 0',()=>{
-    updateCart('456',0);
+    cartHelpers.updateCart('456',0);
 
     expect(cart.length).toEqual(2);
     expect(cart).toEqual([
@@ -161,7 +161,7 @@ describe('displayAddedMessage',()=>{
     const productId = '123';
     const expectedSelector = `.added-${productId}`;
 
-    displayAddedMessage(productId, 1);
+    cartHelpers.displayAddedMessage(productId, 1);
 
     expect(document.querySelector).toHaveBeenCalledWith(expectedSelector);
 
@@ -169,7 +169,7 @@ describe('displayAddedMessage',()=>{
   });
 
   it('remove the message after 1 second',()=>{
-    displayAddedMessage('123',1);
+    cartHelpers.displayAddedMessage('123',1);
 
     jasmine.clock().tick(999);
     expect(mockElement.classList.remove).not.toHaveBeenCalled();
@@ -206,7 +206,7 @@ describe('updateUI',()=>{
 
     Persistance.loadFromStorage();
 
-    updateUI('123');
+    cartHelpers.updateUI('123');
   });
 
   afterEach(()=>{
