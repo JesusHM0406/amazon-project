@@ -89,12 +89,8 @@ describe('calculateCartQuantity',()=>{
 });
 
 describe('updateCart',()=>{
-  afterEach(()=>{
-    spyOn(saveStorage, '');
-    expect(saveStorage()).toHaveBeenCalledTimes(1);
-  });
-
   it('adds a new product with the correct quantity and deliveryId equal to \'1\' as default',()=>{
+    spyOn(Persistance, 'saveStorage');
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
       { productId: '123', quantity: 2, deliveryId: '1' },
       { productId: '321', quantity: 1, deliveryId: '2' }
@@ -109,9 +105,11 @@ describe('updateCart',()=>{
       { productId: '321', quantity: 1, deliveryId: '2' },
       { productId: '456', quantity: 1, deliveryId: '1' }
     ]);
-  })
+    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
+  });
 
-    it('modify the quantity of a existing product',()=>{
+  it('modify the quantity of a existing product',()=>{
+    spyOn(Persistance, 'saveStorage');
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
       { productId: '123', quantity: 2, deliveryId: '1' },
       { productId: '321', quantity: 1, deliveryId: '2' }
@@ -125,5 +123,24 @@ describe('updateCart',()=>{
       { productId: '123', quantity: 2, deliveryId: '1' },
       { productId: '321', quantity: 2, deliveryId: '2' }
     ]);
-  })
-})
+    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
+  });
+
+  it('doesn\'t add a new product if the quantity is 0',()=>{
+    spyOn(Persistance, 'saveStorage');
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { productId: '123', quantity: 2, deliveryId: '1' },
+      { productId: '321', quantity: 1, deliveryId: '2' }
+    ]));
+
+    Persistance.loadFromStorage();
+    updateCart('456',0);
+
+    expect(cart.length).toEqual(2);
+    expect(cart).toEqual([
+      { productId: '123', quantity: 2, deliveryId: '1' },
+      { productId: '321', quantity: 2, deliveryId: '2' }
+    ]);
+    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
+  });
+});
