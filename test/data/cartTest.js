@@ -178,3 +178,46 @@ describe('displayAddedMessage',()=>{
     expect(mockElement.classList.remove).toHaveBeenCalledWith('added-visible');
   });
 });
+
+
+describe('updateUI',()=>{
+
+  beforeEach(()=>{
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { productId: '123', quantity: 5, deliveryId: '1' },
+      { productId: '321', quantity: 1, deliveryId: '2' }
+    ]));
+
+    document.querySelector('.tests-container').innerHTML = `
+      <div class="cart-quantity"></div>
+      <select class='select-123'>
+        <option selected value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+    `;
+
+    Persistance.loadFromStorage();
+
+    updateUI('123');
+  });
+
+  afterEach(()=>{
+    document.querySelector('.tests-container').innerHTML = '';
+  });
+
+  it('update cart quantity on the page',()=>{
+    expect(document.querySelector('.cart-quantity').textContent).toEqual('6');
+  });
+
+  it('resets select value to 1',()=>{
+    expect(document.querySelector('.select-123').value).toEqual('1');
+  })
+})
