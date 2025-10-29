@@ -1,4 +1,8 @@
-import { cart, calculateCartQuantity, Persistance,  updateCart } from "../../data/cart.js";
+import { cart, calculateCartQuantity, Persistance,  updateCart, displayAddedMessage, updateUI } from "../../data/cart.js";
+
+if(jasmine.clock().installed){
+  jasmine.clock().uninstall();
+}
 
 describe('loadFromStorage',()=>{
   it('returns the cart if localStorage returns a valid JSON',()=>{
@@ -131,5 +135,46 @@ describe('updateCart',()=>{
       { productId: '321', quantity: 1, deliveryId: '2' }
     ]);
     expect(Persistance.saveStorage).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('displayAddedMessage',()=>{
+  let mockElement;
+
+  beforeEach(() => {
+    jasmine.clock().install();
+    mockElement = {
+        classList: {
+            add: jasmine.createSpy('add'),
+            remove: jasmine.createSpy('remove')
+        }
+    };
+
+    spyOn(document, 'querySelector').and.returnValue(mockElement);
+  });
+
+  afterEach(()=>{
+    jasmine.clock().uninstall();
+  });
+
+  it('shows the added message', () => {
+    const productId = '123';
+    const expectedSelector = `.added-${productId}`;
+
+    displayAddedMessage(productId, 1);
+
+    expect(document.querySelector).toHaveBeenCalledWith(expectedSelector);
+
+    expect(mockElement.classList.add).toHaveBeenCalledWith('added-visible');
+  });
+
+  it('remove the message after 1 second',()=>{
+    displayAddedMessage('123',1);
+
+    jasmine.clock().tick(999);
+    expect(mockElement.classList.remove).not.toHaveBeenCalled();
+
+    jasmine.clock().tick(1);
+    expect(mockElement.classList.remove).toHaveBeenCalledWith('added-visible');
   });
 });
