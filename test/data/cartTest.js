@@ -139,8 +139,8 @@ describe('updateCart',()=>{
     expect(cart.length).toEqual(2);
     expect(cart).toEqual([
       { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 2, deliveryId: '2' }
+      { productId: '321', quantity: 1, deliveryId: '2' }
     ]);
-    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
+    expect(Persistance.saveStorage).toHaveBeenCalledTimes(0);
   });
 });

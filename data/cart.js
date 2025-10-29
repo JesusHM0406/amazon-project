@@ -32,6 +32,8 @@ export function calculateCartQuantity(){
 export function updateCart(productId,quantity){
   const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
 
+  if(quantity === 0) return;
+
   if(matchedProduct){
     matchedProduct.quantity += quantity; 
   } else{
