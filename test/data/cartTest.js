@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity, loadFromStorage,  updateCart, saveStorage } from "../../data/cart.js";
+import { cart, calculateCartQuantity, Persistance,  updateCart } from "../../data/cart.js";
 
 describe('loadFromStorage',()=>{
   it('returns the cart if localStorage returns a valid JSON',()=>{
@@ -7,7 +7,7 @@ describe('loadFromStorage',()=>{
       { productId: '321', quantity: 1, deliveryId: '2' }
     ]));
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(cart).toEqual([
       { productId: '123', quantity: 2, deliveryId: '1' },
@@ -18,7 +18,7 @@ describe('loadFromStorage',()=>{
   it('returns an empty array if the cart is empty or not initialized',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(null);
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(cart).toEqual([]);
   });
@@ -26,7 +26,7 @@ describe('loadFromStorage',()=>{
   it('returns an empty array if localStorage not returns an array',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(5));
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(cart).toEqual([]);
   });
@@ -34,7 +34,7 @@ describe('loadFromStorage',()=>{
   it('returns an empty array if localStorage returns a non-valid JSON',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(undefined));
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(cart).toEqual([]);
   });
@@ -47,7 +47,7 @@ describe('calculateCartQuantity',()=>{
       { productId: '321', quantity: 1, deliveryId: '2' }
     ]));
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(calculateCartQuantity()).toEqual(3);
   });
@@ -55,7 +55,7 @@ describe('calculateCartQuantity',()=>{
   it('works with empty cart',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([]));
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(calculateCartQuantity()).toEqual(0);
   });
@@ -66,7 +66,7 @@ describe('calculateCartQuantity',()=>{
       { productId: '321', quantity: 0, deliveryId: '2' }
     ]));
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(calculateCartQuantity()).toEqual(0);
   });
@@ -74,7 +74,7 @@ describe('calculateCartQuantity',()=>{
   it('returns 0 when localStorage returns null or undefined',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(undefined);
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(calculateCartQuantity()).toEqual(0);
   });
@@ -82,7 +82,7 @@ describe('calculateCartQuantity',()=>{
   it('returns 0 when localStorage not returns an array',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(5);
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
 
     expect(calculateCartQuantity()).toEqual(0);
   });
@@ -100,7 +100,7 @@ describe('updateCart',()=>{
       { productId: '321', quantity: 1, deliveryId: '2' }
     ]));
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
     updateCart('456',1);
 
     expect(cart.length).toEqual(3);
@@ -117,7 +117,7 @@ describe('updateCart',()=>{
       { productId: '321', quantity: 1, deliveryId: '2' }
     ]));
 
-    loadFromStorage();
+    Persistance.loadFromStorage();
     updateCart('321',1);
 
     expect(cart.length).toEqual(2);
