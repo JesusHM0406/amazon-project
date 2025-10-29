@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity, loadFromStorage } from "../../data/cart.js";
+import { cart, calculateCartQuantity, loadFromStorage,  updateCart, saveStorage } from "../../data/cart.js";
 
 describe('loadFromStorage',()=>{
   it('returns the cart if localStorage returns a valid JSON',()=>{
@@ -87,3 +87,43 @@ describe('calculateCartQuantity',()=>{
     expect(calculateCartQuantity()).toEqual(0);
   });
 });
+
+describe('updateCart',()=>{
+  afterEach(()=>{
+    spyOn(saveStorage, '');
+    expect(saveStorage()).toHaveBeenCalledTimes(1);
+  });
+
+  it('adds a new product with the correct quantity and deliveryId equal to \'1\' as default',()=>{
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { productId: '123', quantity: 2, deliveryId: '1' },
+      { productId: '321', quantity: 1, deliveryId: '2' }
+    ]));
+
+    loadFromStorage();
+    updateCart('456',1);
+
+    expect(cart.length).toEqual(3);
+    expect(cart).toEqual([
+      { productId: '123', quantity: 2, deliveryId: '1' },
+      { productId: '321', quantity: 1, deliveryId: '2' },
+      { productId: '456', quantity: 1, deliveryId: '1' }
+    ]);
+  })
+
+    it('modify the quantity of a existing product',()=>{
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { productId: '123', quantity: 2, deliveryId: '1' },
+      { productId: '321', quantity: 1, deliveryId: '2' }
+    ]));
+
+    loadFromStorage();
+    updateCart('321',1);
+
+    expect(cart.length).toEqual(2);
+    expect(cart).toEqual([
+      { productId: '123', quantity: 2, deliveryId: '1' },
+      { productId: '321', quantity: 2, deliveryId: '2' }
+    ]);
+  })
+})
