@@ -89,7 +89,7 @@ describe('calculateCartQuantity',()=>{
 });
 
 describe('updateCart',()=>{
-  it('adds a new product with the correct quantity and deliveryId equal to \'1\' as default',()=>{
+  beforeEach(()=>{
     spyOn(Persistance, 'saveStorage');
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
       { productId: '123', quantity: 2, deliveryId: '1' },
@@ -97,6 +97,9 @@ describe('updateCart',()=>{
     ]));
 
     Persistance.loadFromStorage();
+  });
+
+  it('adds a new product with the correct quantity and deliveryId equal to \'1\' as default',()=>{
     updateCart('456',1);
 
     expect(cart.length).toEqual(3);
@@ -109,13 +112,6 @@ describe('updateCart',()=>{
   });
 
   it('modify the quantity of a existing product',()=>{
-    spyOn(Persistance, 'saveStorage');
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' }
-    ]));
-
-    Persistance.loadFromStorage();
     updateCart('321',1);
 
     expect(cart.length).toEqual(2);
@@ -127,13 +123,6 @@ describe('updateCart',()=>{
   });
 
   it('doesn\'t add a new product if the quantity is 0',()=>{
-    spyOn(Persistance, 'saveStorage');
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' }
-    ]));
-
-    Persistance.loadFromStorage();
     updateCart('456',0);
 
     expect(cart.length).toEqual(2);
