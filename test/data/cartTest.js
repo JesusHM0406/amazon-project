@@ -40,7 +40,7 @@ describe('loadFromStorage',()=>{
   });
 });
 
-  describe('calculateCartQuantity',()=>{
+describe('calculateCartQuantity',()=>{
   it('returns the total of items in the cart',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
       { productId: '123', quantity: 2, deliveryId: '1' },
