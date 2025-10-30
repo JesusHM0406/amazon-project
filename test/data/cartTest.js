@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart } from "../../data/cart.js";
+import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart, updateDeliveryOption } from "../../data/cart.js";
 
 if(jasmine.clock().installed){
   jasmine.clock().uninstall();
@@ -94,6 +94,7 @@ describe('calculateCartQuantity',()=>{
 
 describe('updateCart',()=>{
   beforeEach(()=>{
+    spyOn(localStorage, 'setItem');
     spyOn(Persistance, 'saveStorage');
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
       { productId: '123', quantity: 2, deliveryId: '1' },
@@ -266,5 +267,36 @@ describe('addToCart (orchetador)',()=>{
     addToCart('123', 1);
 
     expect(cartHelpers.updateCart).not.toHaveBeenCalled();
+  });
+});
+
+describe('updateDeliveryOption',()=>{
+  beforeEach(()=>{
+    spyOn(localStorage, 'setItem');
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { productId: '123', quantity: 5, deliveryId: '1' },
+      { productId: '321', quantity: 3, deliveryId: '2' }
+    ]));
+    spyOn(Persistance, 'saveStorage');
+
+    Persistance.loadFromStorage();
+  });
+
+  it('update the delivery option correctly',()=>{
+    updateDeliveryOption('123','3');
+
+    expect(cart.length).toEqual(2);
+    expect(cart[0].deliveryId).toEqual('3');
+    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
+    expect(cart[1].deliveryId).toEqual('2');
+  });
+
+  it('do nothing if the product doesn\'t exists in the cart',()=>{
+    updateDeliveryOption('456','1');
+
+    expect(cart.length).toEqual(2);
+    expect(cart[0].deliveryId).toEqual('1');
+    expect(Persistance.saveStorage).not.toHaveBeenCalled();
+    expect(cart[1].deliveryId).toEqual('2');
   });
 });
