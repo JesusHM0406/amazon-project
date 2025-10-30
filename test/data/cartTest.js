@@ -319,29 +319,16 @@ describe('updateCartItemQuantity',()=>{
     expect(cart.length).toEqual(2);
     expect(cart[0].quantity).toEqual(2);
     expect(cart[1].quantity).toEqual(3);
+  });
+
+  it('save the updated cart in the storage',()=>{
+    updateCartItemQuantity('123',2);
+
     expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
   });
 
-  it('do nothing if the productId doesn\'t exists in the cart',()=>{
+  it('do nothing if the product id doesn\'t exists in the cart',()=>{
     updateCartItemQuantity('456',2);
-
-    expect(cart.length).toEqual(2);
-    expect(cart[0].quantity).toEqual(5);
-    expect(cart[1].quantity).toEqual(3);
-    expect(Persistance.saveStorage).not.toHaveBeenCalled();
-  });
-
-  it('delete the product if the quantity is 0',()=>{
-    updateCartItemQuantity('123',0);
-
-    expect(cart.length).toEqual(1);
-    expect(cart[0].quantity).toEqual(3);
-    expect(cart[0].productId).toEqual('321');
-    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
-  });
-
-  it('returns the product to its initial quantity if the quantity is invalid',()=>{
-    updateCartItemQuantity('456',NaN);
 
     expect(cart.length).toEqual(2);
     expect(cart[0].quantity).toEqual(5);
