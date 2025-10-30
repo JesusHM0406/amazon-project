@@ -90,6 +90,7 @@ export function updateDeliveryOption(productId,deliveryId){
 
 export function updateCartItemQuantity(productId, newQuantity){
   const matchedProduct = cartHelpers.findItem(productId);
+  if(!matchedProduct) return;
   matchedProduct.quantity = newQuantity;
   Persistance.saveStorage();
 }
