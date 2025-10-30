@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart, updateDeliveryOption } from "../../data/cart.js";
+import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart, updateDeliveryOption, updateCartItemQuantity } from "../../data/cart.js";
 
 if(jasmine.clock().installed){
   jasmine.clock().uninstall();
@@ -298,5 +298,54 @@ describe('updateDeliveryOption',()=>{
     expect(cart[0].deliveryId).toEqual('1');
     expect(Persistance.saveStorage).not.toHaveBeenCalled();
     expect(cart[1].deliveryId).toEqual('2');
+  });
+});
+
+describe('updateCartItemQuantity',()=>{
+  beforeEach(()=>{
+    spyOn(Persistance, 'saveStorage');
+    spyOn(localStorage, 'setItem');
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { productId: '123', quantity: 5, deliveryId: '1' },
+      { productId: '321', quantity: 3, deliveryId: '2' }
+    ]));
+
+    Persistance.loadFromStorage();
+  });
+
+  it('updates the quantity of an existing product',()=>{
+    updateCartItemQuantity('123',2);
+
+    expect(cart.length).toEqual(2);
+    expect(cart[0].quantity).toEqual(2);
+    expect(cart[1].quantity).toEqual(3);
+    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
+  });
+
+  it('do nothing if the productId doesn\'t exists in the cart',()=>{
+    updateCartItemQuantity('456',2);
+
+    expect(cart.length).toEqual(2);
+    expect(cart[0].quantity).toEqual(5);
+    expect(cart[1].quantity).toEqual(3);
+    expect(Persistance.saveStorage).not.toHaveBeenCalled();
+  });
+
+  it('delete the product if the quantity is 0',()=>{
+    updateCartItemQuantity('123',0);
+
+    expect(cart.length).toEqual(1);
+    expect(cart[0].quantity).toEqual(3);
+    expect(cart[0].productId).toEqual('321');
+    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns the product to its initial quantity if the quantity is invalid',()=>{
+    updateCartItemQuantity('456',NaN);
+
+    expect(cart.length).toEqual(2);
+    expect(cart[0].quantity).toEqual(5);
+    expect(cart[1].quantity).toEqual(3);
+    expect(Persistance.saveStorage).not.toHaveBeenCalled();
   });
 });
