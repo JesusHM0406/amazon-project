@@ -52,6 +52,9 @@ export const cartHelpers = {
     document.querySelector('.cart-quantity').textContent = calculateCartQuantity();
 
     document.querySelector(`.select-${productId}`).value = 1;
+  },
+  findItem(productId){
+    return cart.find(cartItem=>cartItem.productId === productId);
   }
 };
 
@@ -78,7 +81,7 @@ export function addToCart(productId,timeoutId){
 };
 
 export function updateDeliveryOption(productId,deliveryId){
-  const matchedProduct = cart.find(cartItem=>cartItem.productId === productId);
+  const matchedProduct = cartHelpers.findItem(productId);
   if (matchedProduct){
     matchedProduct.deliveryId = deliveryId;
     Persistance.saveStorage();
@@ -86,7 +89,7 @@ export function updateDeliveryOption(productId,deliveryId){
 }
 
 export function updateCartItemQuantity(productId, newQuantity){
-  const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
+  const matchedProduct = cartHelpers.findItem(productId);
   matchedProduct.quantity = newQuantity;
   Persistance.saveStorage();
 }
