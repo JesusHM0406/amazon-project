@@ -1,4 +1,4 @@
-import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart, updateDeliveryOption, updateCartItemQuantity } from "../../data/cart.js";
+import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart, updateDeliveryOption, updateCartItemQuantity, removeFromCart } from "../../data/cart.js";
 
 if(jasmine.clock().installed){
   jasmine.clock().uninstall();
@@ -334,5 +334,49 @@ describe('updateCartItemQuantity',()=>{
     expect(cart[0].quantity).toEqual(5);
     expect(cart[1].quantity).toEqual(3);
     expect(Persistance.saveStorage).not.toHaveBeenCalled();
+  });
+});
+
+describe('removeFromCart',()=>{
+  beforeEach(()=>{
+    spyOn(Persistance, 'saveStorage');
+    spyOn(localStorage, 'setItem');
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { productId: '123', quantity: 5, deliveryId: '1' },
+      { productId: '321', quantity: 3, deliveryId: '2' },
+      { productId: '456', quantity: 1, deliveryId: '1' }
+    ]));
+
+    Persistance.loadFromStorage();
+  });
+
+  it('remove the product from the cart',()=>{
+    removeFromCart('123');
+
+    expect(cart.length).toEqual(2);
+    expect(cart).toEqual([
+      { productId: '321', quantity: 3, deliveryId: '2' },
+      { productId: '456', quantity: 1, deliveryId: '1' }
+    ]);
+    expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
+  });
+
+  it('handles the case when all products are removed',()=>{
+    removeFromCart('123');
+    removeFromCart('321');
+    removeFromCart('456');
+
+    expect(cart).toEqual([]);
+  });
+
+  it('do nothing if the product id doesn\'t exists in the cart',()=>{
+    removeFromCart('654');
+
+    expect(cart.length).toEqual(3);
+    expect(cart).toEqual([
+      { productId: '123', quantity: 5, deliveryId: '1' },
+      { productId: '321', quantity: 3, deliveryId: '2' },
+      { productId: '456', quantity: 1, deliveryId: '1' }
+    ]);
   });
 });
