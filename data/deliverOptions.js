@@ -6,7 +6,7 @@ export const deliveryOptions = [
   {id: '3', priceCents: 999, days: 1}
 ];
 
-function isWeekend(date){
+export function isWeekend(date){
   const dateFormated = date.format('dddd');
   return dateFormated === 'Sunday' || dateFormated === 'Saturday';
 }
