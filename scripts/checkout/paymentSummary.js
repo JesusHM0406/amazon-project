@@ -56,4 +56,4 @@ export function renderPaymentSummary(){
   `;
 
   document.querySelector('.payment-summary').innerHTML = paymentSummaryHTML;
-}
+};

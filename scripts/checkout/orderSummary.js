@@ -5,16 +5,25 @@ import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 import { renderHeader } from "../checkout.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 
-export function renderOrderSummary(){
+function findDeliveryOption(deliveryId){
+  const optionExists = deliveryOptions.some(option => option.id === deliveryId);
+
+  if(!optionExists){
+    return deliveryOptions[0];
+  }
+
+  return deliveryOptions.find(option => option.id === deliveryId);
+}
+
+function createOrderSummaryHTML(){
   let orderSummaryHTML = '';
+
   cart.forEach(cartItem => {
     const matchedProduct = products.find(productItem => productItem.id === cartItem.productId);
 
-    const { deliveryId } = cartItem;
-    const today = dayjs();
-    const dateDays = deliveryOptions.find(option=> option.id === deliveryId).days;
-    let deliveryDate = today.add(dateDays, 'days');
-    deliveryDate = deliveryDate.format('dddd, MMMM D');
+    const { deliveryId } = cartItem; 
+    const deliveryOption = findDeliveryOption(deliveryId);
+    let deliveryDate = calculateDeliveryDate(deliveryOption);
 
     orderSummaryHTML += `
       <div class="cart-item-container">
@@ -53,38 +62,43 @@ export function renderOrderSummary(){
       </div>
     `;
   });
-  document.querySelector('.order-summary').innerHTML = orderSummaryHTML;
 
-  function createOptionsHTML(productId){
-    let optionsHTML = '';
-    
-    deliveryOptions.forEach(option=>{
-      const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
+  return orderSummaryHTML;
+};
 
-      if(matchedProduct){
-        let deliveryDate = calculateDeliveryDate(option);
-        const matchedOption = matchedProduct.deliveryId;
-        const priceString = option.priceCents === 0 ? 'FREE' : `$${option.priceCents / 100} -`;
+function createOptionsHTML(productId){
+  let optionsHTML = '';
+  
+  deliveryOptions.forEach(option=>{
+    const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
 
-        optionsHTML += `
-        <div class="delivery-option" data-product-id="${productId}" data-delivery-id="${option.id}">
-          <input type="radio" ${matchedOption === option.id ? 'checked' : ''} class="delivery-option-input" name="delivery-option-${productId}">
+    if(matchedProduct){
+      let deliveryDate = calculateDeliveryDate(option);
+      const matchedOption = matchedProduct.deliveryId;
+      const priceString = option.priceCents === 0 ? 'FREE' : `$${option.priceCents / 100} -`;
 
-          <div>
-            <div class="delivery-option-date">${deliveryDate}</div>
-            <div class="delivery-option-price">${priceString} Shipping</div>
-          </div>
+      optionsHTML += `
+      <div class="delivery-option" data-product-id="${productId}" data-delivery-id="${option.id}">
+        <input type="radio" ${matchedOption === option.id ? 'checked' : ''} class="delivery-option-input" name="delivery-option-${productId}">
+
+        <div>
+          <div class="delivery-option-date">${deliveryDate}</div>
+          <div class="delivery-option-price">${priceString} Shipping</div>
         </div>
-        `;
-      }
-    });
+      </div>
+      `;
+    }
+  });
 
-    return optionsHTML;
-  }
+  return optionsHTML;
+};
 
+export function renderOrderSummary(){
+  document.querySelector('.order-summary').innerHTML = createOrderSummaryHTML();
+  
   document.querySelectorAll('.delivery-option').forEach(option=>{
     option.addEventListener('click',()=>{
-      const { productId,deliveryId } = option.dataset;
+      const { productId, deliveryId } = option.dataset;
       updateDeliveryOption(productId, deliveryId);
       renderPaymentSummary();
       renderOrderSummary();
