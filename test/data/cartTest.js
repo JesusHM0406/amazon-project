@@ -222,7 +222,7 @@ describe('updateUI',()=>{
   })
 });
 
-describe('addToCart (orchetador)',()=>{
+describe('addToCart (orchestador)',()=>{
   beforeEach(()=>{
     spyOn(cartHelpers, 'updateCart');
     spyOn(cartHelpers, 'displayAddedMessage');
