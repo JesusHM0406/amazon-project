@@ -42,3 +42,47 @@ describe('isWeekend',()=>{
     expect(isWeekend(randomDate)).toEqual(false);
   });
 });
+
+describe('calculateDeliveryDate',()=>{
+  beforeEach(()=>{
+    jasmine.clock().install();
+  });
+
+  afterEach(()=>{
+    jasmine.clock().uninstall();
+  })
+
+  it('returns the next day if the delivery option is 3 (1 day) and is weekday (not friday)',()=>{
+    // Tuesday
+    const fixedDate = new Date('January 21, 2025');
+    jasmine.clock().mockDate(fixedDate);
+
+    expect(calculateDeliveryDate(deliveryOptions[2])).toEqual('Wednesday, January 22');
+  });
+
+  it('skips the weekend if its friday',()=>{
+    // Friday
+    const fixedDate = new Date('January 24, 2025');
+    jasmine.clock().mockDate(fixedDate);
+
+    expect(calculateDeliveryDate(deliveryOptions[2])).toEqual('Monday, January 27');
+  });
+
+  it('skips the weekend if the option is 1 (7 days) and is monday',()=>{
+    // Monday
+    const fixedDate = new Date('January 20, 2025');
+    jasmine.clock().mockDate(fixedDate);
+
+    // 9 Days after
+    expect(calculateDeliveryDate(deliveryOptions[0])).toEqual('Wednesday, January 29');
+  });
+
+  it('skips the weekend if the option is 2 (3 days) and is thursday',()=>{
+    // Thursday
+    const fixedDate = new Date('January 23, 2025');
+    jasmine.clock().mockDate(fixedDate);
+
+    // 5 Days after
+    expect(calculateDeliveryDate(deliveryOptions[1])).toEqual('Tuesday, January 28');
+  });
+});
