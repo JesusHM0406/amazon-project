@@ -1,9 +1,5 @@
 import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart, updateDeliveryOption, updateCartItemQuantity, removeFromCart } from "../../data/cart.js";
 
-if(jasmine.clock().installed){
-  jasmine.clock().uninstall();
-}
-
 describe('loadFromStorage',()=>{
   it('returns the cart if localStorage returns a valid JSON',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
