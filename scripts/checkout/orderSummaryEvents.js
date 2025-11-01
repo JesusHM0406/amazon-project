@@ -36,6 +36,4 @@ export function handleSaveQuantity(link){
 export function hanldeDeleteLink(link){
   const { productId } = link.dataset;
   removeFromCart(productId);
-  const cartItemContainer = link.closest('.cart-item-container');
-  cartItemContainer.remove();
 };

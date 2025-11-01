@@ -121,8 +121,7 @@ export function atachOrderSummaryEventListeners(){
   document.querySelectorAll('.delete-quantity-link').forEach(link=>{
     link.addEventListener('click', ()=> {
       hanldeDeleteLink(link)
-      renderHeader();
-      renderPaymentSummary();
+      renderAllSections();
     });
   });
 }
