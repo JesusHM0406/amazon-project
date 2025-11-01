@@ -23,7 +23,6 @@ function createOrderSummaryHTML(){
     if(!matchedProduct){
       alert(`Product with ${cartItem.productId} ID seems that is not in the catalog. Deleting product`);
       removeFromCart(cartItem.productId);
-      renderAllSections();
       return;
     }
 
