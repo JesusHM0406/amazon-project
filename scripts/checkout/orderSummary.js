@@ -14,7 +14,7 @@ export function findDeliveryOption(deliveryId){
   return deliveryOptions.find(option => option.id === deliveryId);
 };
 
-function createOrderSummaryHTML(){
+export function createOrderSummaryHTML(){
   let orderSummaryHTML = '';
 
   cart.forEach(cartItem => {
@@ -71,7 +71,7 @@ function createOrderSummaryHTML(){
   return orderSummaryHTML;
 };
 
-function createOptionsHTML(productId){
+export function createOptionsHTML(productId){
   let optionsHTML = '';
   
   deliveryOptions.forEach(option=>{
