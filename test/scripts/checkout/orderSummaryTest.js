@@ -1,6 +1,6 @@
 import { Persistance } from "../../../data/cart.js";
 import { calculateDeliveryDate, deliveryOptions } from "../../../data/deliverOptions.js";
-import { createOrderSummaryHTML, findDeliveryOption } from "../../../scripts/checkout/orderSummary.js";
+import { createOptionsHTML, createOrderSummaryHTML, findDeliveryOption } from "../../../scripts/checkout/orderSummary.js";
 
 const TEST_CART = [{ productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryId: '1', isEditing: false }];
 
@@ -77,5 +77,37 @@ describe('createOrderSummaryHTML',()=>{
     const productContainer = document.querySelector('.cart-item-container');
 
     expect(productContainer.classList.contains('is-editing')).toEqual(true);
+  });
+});
+
+describe('createOptionsHTML',()=>{
+  beforeEach(()=>{
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([{ productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryId: '2', isEditing: false }]));
+    Persistance.loadFromStorage();
+
+    const container = document.querySelector('.tests-container');
+
+    container.innerHTML = createOptionsHTML('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
+  });
+
+  afterEach(()=>{
+    document.querySelector('.tests-container').innerHTML = '';
+  });
+
+  it('shows the correct quantity of options available',()=>{
+    const divOptions = document.querySelectorAll('.delivery-option');
+
+    expect(divOptions.length).toEqual(deliveryOptions.length);
+  });
+
+  it('shows selected the correct option',()=>{
+    const divOptions = document.querySelectorAll('.delivery-option');
+    const expectedNotSelectedOption1 = divOptions[0];
+    const expectedSelectedOption = divOptions[1];
+    const expectedNotSelectedOption2 = divOptions[2];
+
+    expect(expectedNotSelectedOption1.querySelector('.delivery-option-input').hasAttribute('checked')).toEqual(false);
+    expect(expectedSelectedOption.querySelector('.delivery-option-input').hasAttribute('checked')).toEqual(true);
+    expect(expectedNotSelectedOption2.querySelector('.delivery-option-input').hasAttribute('checked')).toEqual(false);
   });
 })
