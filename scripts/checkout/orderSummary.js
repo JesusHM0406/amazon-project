@@ -1,11 +1,10 @@
-import { cart, updateDeliveryOption, updateCartItemQuantity, removeFromCart } from "../../data/cart.js";
+import { cart, calculateCartQuantity } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { calculateDeliveryDate, deliveryOptions } from "../../data/deliverOptions.js";
-import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-import { renderHeader } from "../checkout.js";
+import { handleSaveQuantity, handleUpdateDeliveryOption, handleUpdateDeliveryOptionUI, hanldeDeleteLink, showEditingQuantityContainer } from "./orderSummaryEvents.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 
-function findDeliveryOption(deliveryId){
+export function findDeliveryOption(deliveryId){
   const optionExists = deliveryOptions.some(option => option.id === deliveryId);
 
   if(!optionExists){
@@ -13,7 +12,7 @@ function findDeliveryOption(deliveryId){
   }
 
   return deliveryOptions.find(option => option.id === deliveryId);
-}
+};
 
 function createOrderSummaryHTML(){
   let orderSummaryHTML = '';
@@ -93,76 +92,38 @@ function createOptionsHTML(productId){
   return optionsHTML;
 };
 
-export function renderOrderSummary(){
-  document.querySelector('.order-summary').innerHTML = createOrderSummaryHTML();
-  
-  document.querySelectorAll('.delivery-option').forEach(option=>{
-    option.addEventListener('click',()=>{
-      const { productId, deliveryId } = option.dataset;
-      updateDeliveryOption(productId, deliveryId);
-      renderPaymentSummary();
-      renderOrderSummary();
-    });
-  });
+export function renderHeader(){
+  document.querySelector('.return-to-home-link').textContent = calculateCartQuantity();
+};
+
+export function atachOrderSummaryEventListeners(){
+  document.querySelectorAll('.delivery-option').forEach(option => option.addEventListener('click', ()=> {
+    handleUpdateDeliveryOption(option)
+    handleUpdateDeliveryOptionUI(option);
+    renderPaymentSummary();
+  }));
 
   document.querySelectorAll('.update-quantity-link').forEach(link=>{
-    link.addEventListener('click',()=>{
-      link.closest('.cart-item-container').classList.add('is-editing');
-    });
+    link.addEventListener('click', ()=> showEditingQuantityContainer(link));
   });
 
   document.querySelectorAll('.save-quantity-link').forEach(link=>{
-    link.addEventListener('click',()=>{
-      let newQuantity = Number(link.previousElementSibling.value);
-      const { productId } = link.dataset;
-
-      try{
-        const productExists = cart.some(cartItem => cartItem.productId === productId);
-
-        if(!productExists){
-          throw new Error(`Attempted to update non-existent product ID: ${productId}. Exiting.`);
-        }
-
-        const cartItemContainer = link.closest('.cart-item-container');
-        const originalValue = Number(document.querySelector(`.quantity-label-${productId}`).value);
-
-        if(isNaN(newQuantity)){
-          link.previousElementSibling.value = originalValue;
-          link.previousElementSibling.setAttribute('type','number');
-          cartItemContainer.classList.remove('is-editing');
-          return;
-        }
-
-        const quantityLabel = document.querySelector(`.quantity-label-${productId}`);
-
-        if(newQuantity <= 0){
-          removeFromCart(productId);
-          cartItemContainer.remove();
-          renderHeader();
-          renderPaymentSummary();
-          return;
-        }
-
-        updateCartItemQuantity(productId, newQuantity);
-
-        quantityLabel.textContent = newQuantity;
-        link.closest('.cart-item-container').classList.remove('is-editing');
-
-        renderHeader();
-        renderPaymentSummary();
-      } catch (e){
-        console.warn(e);
-      }
+    link.addEventListener('click', ()=> {
+      handleSaveQuantity(link)
+      renderHeader();
+      renderPaymentSummary();
     });
   });
 
   document.querySelectorAll('.delete-quantity-link').forEach(link=>{
-    link.addEventListener('click',()=>{
-      const { productId } = link.dataset;
-      removeFromCart(productId);
+    link.addEventListener('click', ()=> {
+      hanldeDeleteLink(link)
       renderHeader();
       renderPaymentSummary();
-      renderOrderSummary();
     });
   });
+}
+
+export function renderOrderSummary(){
+  document.querySelector('.order-summary').innerHTML = createOrderSummaryHTML();
 };
