@@ -1,8 +1,9 @@
 import { cart, calculateCartQuantity } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { calculateDeliveryDate, deliveryOptions } from "../../data/deliverOptions.js";
-import { handleSaveQuantity, handleUpdateDeliveryOption, handleUpdateDeliveryOptionUI, hanldeDeleteLink, showEditingQuantityContainer } from "./orderSummaryEvents.js";
+import { handleSaveQuantity, handleUpdateDeliveryOption, hanldeDeleteLink, showEditingQuantityContainer } from "./orderSummaryEvents.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
+import { renderAllSections } from "../checkout.js";
 
 export function findDeliveryOption(deliveryId){
   const optionExists = deliveryOptions.some(option => option.id === deliveryId);
@@ -99,8 +100,7 @@ export function renderHeader(){
 export function atachOrderSummaryEventListeners(){
   document.querySelectorAll('.delivery-option').forEach(option => option.addEventListener('click', ()=> {
     handleUpdateDeliveryOption(option)
-    handleUpdateDeliveryOptionUI(option);
-    renderPaymentSummary();
+    renderAllSections();
   }));
 
   document.querySelectorAll('.update-quantity-link').forEach(link=>{
