@@ -1,12 +1,12 @@
-import { cart, removeFromCart, updateCartItemQuantity, updateDeliveryOption } from "../../data/cart.js";
+import { cart, cartHelpers, removeFromCart, updateCartItemQuantity, updateDeliveryOption } from "../../data/cart.js";
 
 export function handleUpdateDeliveryOption(option){
   const { productId, deliveryId } = option.dataset;
   updateDeliveryOption(productId, deliveryId);
 };
 
-export function showEditingQuantityContainer(link){
-  link.closest('.cart-item-container').classList.add('is-editing');
+export function showEditingQuantityContainer(productId){
+  cartHelpers.toggleIsEditing(productId, true);
 };
 
 export function handleSaveQuantity(link){

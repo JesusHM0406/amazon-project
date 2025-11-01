@@ -34,7 +34,7 @@ export const cartHelpers = {
     if(matchedProduct){
       matchedProduct.quantity += quantity; 
     } else{
-      cart.push({productId, quantity, deliveryId: '1'})
+      cart.push({productId, quantity, deliveryId: '1', isEditing: false});
     }
     Persistance.saveStorage();  
   },
@@ -55,6 +55,12 @@ export const cartHelpers = {
   },
   findItem(productId){
     return cart.find(cartItem=>cartItem.productId === productId);
+  },
+  toggleIsEditing(productId, isEditing){
+    const matchedProduct = this.findItem(productId);
+    if (matchedProduct){
+      matchedProduct.isEditing = isEditing;
+    }
   }
 };
 

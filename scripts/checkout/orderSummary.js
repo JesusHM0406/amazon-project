@@ -26,7 +26,7 @@ function createOrderSummaryHTML(){
     let deliveryDate = calculateDeliveryDate(deliveryOption);
 
     orderSummaryHTML += `
-      <div class="cart-item-container">
+      <div class="cart-item-container ${cartItem.isEditing ? 'is-editing' : ''}">
         <div class="delivery-date">Delivery date: ${deliveryDate}</div>
 
         <div class="cart-item-details-grid">
@@ -42,7 +42,7 @@ function createOrderSummaryHTML(){
                 Quantity: <span class="quantity-label quantity-label-${matchedProduct.id}">${cartItem.quantity}</span>
               </span>
 
-              <span class="update-quantity-link link-primary">Update</span>
+              <span class="update-quantity-link link-primary" data-product-id="${matchedProduct.id}">Update</span>
               <div class="updating-quantity-container">
                 <input type="number" class="quantity-input" min="1">
                 <span class="save-quantity-link link-primary" data-product-id="${matchedProduct.id}">Save</span>
@@ -104,7 +104,11 @@ export function atachOrderSummaryEventListeners(){
   }));
 
   document.querySelectorAll('.update-quantity-link').forEach(link=>{
-    link.addEventListener('click', ()=> showEditingQuantityContainer(link));
+    link.addEventListener('click', ()=> {
+      const { productId } = link.dataset;
+      showEditingQuantityContainer(productId);
+      renderAllSections();
+    });
   });
 
   document.querySelectorAll('.save-quantity-link').forEach(link=>{
