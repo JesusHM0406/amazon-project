@@ -12,15 +12,6 @@ export function showEditingQuantityContainer(productId){
 
 export function handleSaveQuantity(link){
   let newQuantity = Number(link.previousElementSibling.value);
-  const { productId } = link.dataset;
-
-  const productExists = cart.some(cartItem => cartItem.productId === productId);
-
-  if(!productExists){
-    alert(`Attempted to update non-existent product ID: ${productId}`);
-    renderAllSections(); // This is to reset the products
-    return;
-  }
 
   if(isNaN(newQuantity) || newQuantity <= 0){
     alert('Attempted to update an item quantity with 0 or a non-number value. Deleting product.');

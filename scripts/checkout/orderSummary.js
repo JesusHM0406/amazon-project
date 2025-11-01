@@ -118,6 +118,15 @@ export function atachOrderSummaryEventListeners(){
 
   document.querySelectorAll('.save-quantity-link').forEach(link=>{
     link.addEventListener('click', ()=> {
+      const { productId } = link.dataset;
+      const productExists = cart.some(cartItem => cartItem.productId === productId);
+      
+      console.log(productExists);
+      if(!productExists){
+        alert(`Attempted to update non-existent product ID: ${productId}`);
+        renderAllSections(); // This is to reset the products
+        return;
+      }
       handleSaveQuantity(link);
       renderAllSections();
     });
