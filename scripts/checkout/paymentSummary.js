@@ -9,6 +9,11 @@ function calculateTotalCosts(){
 
   cart.forEach(cartItem => {
     const matchedProduct = products.find(product => product.id === cartItem.productId);
+
+    if(!matchedProduct){
+      return;
+    }
+
     const deliveryOption = deliveryOptions.find(option => option.id === cartItem.deliveryId);
 
     priceCents += matchedProduct.priceCents * cartItem.quantity;

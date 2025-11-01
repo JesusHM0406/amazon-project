@@ -1,8 +1,7 @@
-import { cart, calculateCartQuantity } from "../../data/cart.js";
+import { cart, calculateCartQuantity, removeFromCart } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { calculateDeliveryDate, deliveryOptions } from "../../data/deliverOptions.js";
 import { handleSaveQuantity, handleUpdateDeliveryOption, hanldeDeleteLink, showEditingQuantityContainer } from "./orderSummaryEvents.js";
-import { renderPaymentSummary } from "./paymentSummary.js";
 import { renderAllSections } from "../checkout.js";
 
 export function findDeliveryOption(deliveryId){
@@ -20,6 +19,13 @@ function createOrderSummaryHTML(){
 
   cart.forEach(cartItem => {
     const matchedProduct = products.find(productItem => productItem.id === cartItem.productId);
+
+    if(!matchedProduct){
+      alert(`Product with ${cartItem.productId} ID seems that is not in the catalog. Deleting product`);
+      removeFromCart(cartItem.productId);
+      renderAllSections();
+      return;
+    }
 
     const { deliveryId } = cartItem; 
     const deliveryOption = findDeliveryOption(deliveryId);
