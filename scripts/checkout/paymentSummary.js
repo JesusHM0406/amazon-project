@@ -3,7 +3,7 @@ import { deliveryOptions } from "../../data/deliverOptions.js";
 import { products } from "../../data/products.js";
 import { formatCurency } from "../utils/money.js";
 
-function calculateTotalCosts(){
+export function calculateTotalCosts(){
   let priceCents = 0;
   let shippingPriceCents = 0;
 
