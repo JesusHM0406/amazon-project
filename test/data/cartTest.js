@@ -1,18 +1,17 @@
 import { cart, calculateCartQuantity, Persistance,  cartHelpers, addToCart, updateDeliveryOption, updateCartItemQuantity, removeFromCart } from "../../data/cart.js";
 
+const TEST_CART = [
+  { productId: '123', quantity: 2, deliveryId: '1', isEditing: false },
+  { productId: '321', quantity: 1, deliveryId: '2', isEditing: false }
+];
+
 describe('loadFromStorage',()=>{
   it('returns the cart if localStorage returns a valid JSON',()=>{
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' }
-    ]));
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_CART));
 
     Persistance.loadFromStorage();
 
-    expect(cart).toEqual([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' }
-    ]);
+    expect(cart).toEqual(TEST_CART);
   });
 
   it('returns an empty array if the cart is empty or not initialized',()=>{
@@ -42,10 +41,7 @@ describe('loadFromStorage',()=>{
 
 describe('calculateCartQuantity',()=>{
   it('returns the total of items in the cart',()=>{
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' }
-    ]));
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_CART));
 
     Persistance.loadFromStorage();
 
@@ -92,10 +88,7 @@ describe('updateCart',()=>{
   beforeEach(()=>{
     spyOn(localStorage, 'setItem');
     spyOn(Persistance, 'saveStorage');
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' }
-    ]));
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_CART));
 
     Persistance.loadFromStorage();
   });
@@ -105,9 +98,9 @@ describe('updateCart',()=>{
 
     expect(cart.length).toEqual(3);
     expect(cart).toEqual([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' },
-      { productId: '456', quantity: 1, deliveryId: '1' }
+      { productId: '123', quantity: 2, deliveryId: '1', isEditing: false },
+      { productId: '321', quantity: 1, deliveryId: '2', isEditing: false },
+      { productId: '456', quantity: 1, deliveryId: '1', isEditing: false }
     ]);
     expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
   });
@@ -117,8 +110,8 @@ describe('updateCart',()=>{
 
     expect(cart.length).toEqual(2);
     expect(cart).toEqual([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 2, deliveryId: '2' }
+      { productId: '123', quantity: 2, deliveryId: '1', isEditing: false },
+      { productId: '321', quantity: 2, deliveryId: '2', isEditing: false }
     ]);
     expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
   });
@@ -127,10 +120,7 @@ describe('updateCart',()=>{
     cartHelpers.updateCart('456',0);
 
     expect(cart.length).toEqual(2);
-    expect(cart).toEqual([
-      { productId: '123', quantity: 2, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' }
-    ]);
+    expect(cart).toEqual(TEST_CART);
     expect(Persistance.saveStorage).toHaveBeenCalledTimes(0);
   });
 });
@@ -179,10 +169,7 @@ describe('displayAddedMessage',()=>{
 describe('updateUI',()=>{
 
   beforeEach(()=>{
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 5, deliveryId: '1' },
-      { productId: '321', quantity: 1, deliveryId: '2' }
-    ]));
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_CART));
 
     document.querySelector('.tests-container').innerHTML = `
       <div class="cart-quantity"></div>
@@ -210,7 +197,7 @@ describe('updateUI',()=>{
   });
 
   it('update cart quantity on the page',()=>{
-    expect(document.querySelector('.cart-quantity').textContent).toEqual('6');
+    expect(document.querySelector('.cart-quantity').textContent).toEqual('3');
   });
 
   it('resets select value to 1',()=>{
@@ -269,10 +256,7 @@ describe('addToCart (orchestador)',()=>{
 describe('updateDeliveryOption',()=>{
   beforeEach(()=>{
     spyOn(localStorage, 'setItem');
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 5, deliveryId: '1' },
-      { productId: '321', quantity: 3, deliveryId: '2' }
-    ]));
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_CART));
     spyOn(Persistance, 'saveStorage');
 
     Persistance.loadFromStorage();
@@ -301,10 +285,7 @@ describe('updateCartItemQuantity',()=>{
   beforeEach(()=>{
     spyOn(Persistance, 'saveStorage');
     spyOn(localStorage, 'setItem');
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 5, deliveryId: '1' },
-      { productId: '321', quantity: 3, deliveryId: '2' }
-    ]));
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_CART));
 
     Persistance.loadFromStorage();
   });
@@ -314,7 +295,7 @@ describe('updateCartItemQuantity',()=>{
 
     expect(cart.length).toEqual(2);
     expect(cart[0].quantity).toEqual(2);
-    expect(cart[1].quantity).toEqual(3);
+    expect(cart[1].quantity).toEqual(1);
   });
 
   it('save the updated cart in the storage',()=>{
@@ -327,8 +308,8 @@ describe('updateCartItemQuantity',()=>{
     updateCartItemQuantity('456',2);
 
     expect(cart.length).toEqual(2);
-    expect(cart[0].quantity).toEqual(5);
-    expect(cart[1].quantity).toEqual(3);
+    expect(cart[0].quantity).toEqual(2);
+    expect(cart[1].quantity).toEqual(1);
     expect(Persistance.saveStorage).not.toHaveBeenCalled();
   });
 });
@@ -337,11 +318,7 @@ describe('removeFromCart',()=>{
   beforeEach(()=>{
     spyOn(Persistance, 'saveStorage');
     spyOn(localStorage, 'setItem');
-    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
-      { productId: '123', quantity: 5, deliveryId: '1' },
-      { productId: '321', quantity: 3, deliveryId: '2' },
-      { productId: '456', quantity: 1, deliveryId: '1' }
-    ]));
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_CART));
 
     Persistance.loadFromStorage();
   });
@@ -349,10 +326,9 @@ describe('removeFromCart',()=>{
   it('remove the product from the cart',()=>{
     removeFromCart('123');
 
-    expect(cart.length).toEqual(2);
+    expect(cart.length).toEqual(1);
     expect(cart).toEqual([
-      { productId: '321', quantity: 3, deliveryId: '2' },
-      { productId: '456', quantity: 1, deliveryId: '1' }
+      { productId: '321', quantity: 1, deliveryId: '2', isEditing: false }
     ]);
     expect(Persistance.saveStorage).toHaveBeenCalledTimes(1);
   });
@@ -360,7 +336,6 @@ describe('removeFromCart',()=>{
   it('handles the case when all products are removed',()=>{
     removeFromCart('123');
     removeFromCart('321');
-    removeFromCart('456');
 
     expect(cart).toEqual([]);
   });
@@ -368,11 +343,7 @@ describe('removeFromCart',()=>{
   it('do nothing if the product id doesn\'t exists in the cart',()=>{
     removeFromCart('654');
 
-    expect(cart.length).toEqual(3);
-    expect(cart).toEqual([
-      { productId: '123', quantity: 5, deliveryId: '1' },
-      { productId: '321', quantity: 3, deliveryId: '2' },
-      { productId: '456', quantity: 1, deliveryId: '1' }
-    ]);
+    expect(cart.length).toEqual(2);
+    expect(cart).toEqual(TEST_CART);
   });
 });
