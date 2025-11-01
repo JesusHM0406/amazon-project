@@ -3,7 +3,7 @@ import { deliveryOptions } from "../../data/deliverOptions.js";
 import { products } from "../../data/products.js";
 import { formatCurency } from "../utils/money.js";
 
-export function renderPaymentSummary(){
+function calculateTotalCosts(){
   let priceCents = 0;
   let shippingPriceCents = 0;
 
@@ -16,9 +16,15 @@ export function renderPaymentSummary(){
   });
 
   const beforeTaxCents = priceCents + shippingPriceCents;
-  const taxCents = beforeTaxCents*0.1;
+  const taxCents = beforeTaxCents * 0.1;
   const totalCents = beforeTaxCents + taxCents;
   const total = formatCurency(totalCents);
+
+  return { priceCents, shippingPriceCents, beforeTaxCents, taxCents, total };
+};
+
+export function renderPaymentSummary(){
+  const { priceCents, shippingPriceCents, beforeTaxCents, taxCents, total } = calculateTotalCosts();
 
   const cartQuantity = calculateCartQuantity();
 
