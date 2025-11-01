@@ -113,9 +113,8 @@ export function atachOrderSummaryEventListeners(){
 
   document.querySelectorAll('.save-quantity-link').forEach(link=>{
     link.addEventListener('click', ()=> {
-      handleSaveQuantity(link)
-      renderHeader();
-      renderPaymentSummary();
+      handleSaveQuantity(link);
+      renderAllSections();
     });
   });
 
