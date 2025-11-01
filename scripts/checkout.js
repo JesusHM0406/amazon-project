@@ -8,7 +8,4 @@ export function renderAllSections(){
   atachOrderSummaryEventListeners();
 };
 
-renderHeader();
-renderPaymentSummary();
-renderOrderSummary();
-atachOrderSummaryEventListeners();
+renderAllSections();
