@@ -1,10 +1,8 @@
 import { calculateCartQuantity, cart, Persistance } from "../../data/cart.js";
 import { deliveryOptions } from "../../data/deliverOptions.js";
-import { orders } from "../../data/orders.js";
 import { products } from "../../data/products.js";
 import { renderAllSections } from "../checkout.js";
 import { formatCurency } from "../utils/money.js";
-import { atachOrderSummaryEventListeners, renderHeader, renderOrderSummary } from "./orderSummary.js";
 import { createNewOrder } from "./paymentSummaryEvents.js";
 
 export function calculateTotalCosts(){
@@ -77,6 +75,6 @@ export function atachPaymentSummaryEventListeners(){
   document.querySelector('.place-order-button').addEventListener('click',()=>{
     createNewOrder();
     Persistance.cleanCart();
-    window.location.href = '../../orders.html';
+    renderAllSections();
   });
 }

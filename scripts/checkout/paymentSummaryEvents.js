@@ -1,6 +1,6 @@
 import { cart } from "../../data/cart.js";
 import { calculateDeliveryDate } from "../../data/deliverOptions.js";
-import { Order } from "../../data/orders.js";
+import { Order, addToOrders } from "../../data/orders.js";
 import { findDeliveryOption } from "./orderSummary.js";
 import { calculateTotalCosts } from "./paymentSummary.js";
 
@@ -18,7 +18,7 @@ export function createNewOrder(){
 
   const { totalCents } = calculateTotalCosts();
 
-  const newOrder = new Order(totalCents, products);
+  const newOrder = Order.createNewOrder(totalCents, products);
 
-  newOrder.addToOrders();
+  addToOrders(newOrder);
 };

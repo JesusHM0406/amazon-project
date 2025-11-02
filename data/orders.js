@@ -1,3 +1,5 @@
+import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
+
 export let orders = [];
 
 export function ordersLoadFromStorage(){
@@ -5,12 +7,14 @@ export function ordersLoadFromStorage(){
     let ordersJson = localStorage.getItem('orders');
 
     if(ordersJson){
-      orders = JSON.parse(ordersJson);
+      const ordersParsed = JSON.parse(ordersJson);
+      orders = ordersParsed.map(data => Order.fromJSON(data));
     } else {
       orders = [];
     }
   } catch(e){
-    console.log('Error: not valid JSON, resetting orders ', e);
+    console.warn('Error: not valid JSON, resetting orders ');
+    console.warn(e);
     orders = [];
   }
 
@@ -24,17 +28,41 @@ export function ordersSaveStorage(){
 };
 
 export class Order{
-  #orderId = this.#generateOrderId();
-  #orderTime = new Date();
+  #orderId;
+  #orderTime;
   #totalCostCents;
   #products;
 
-  constructor(totalCostCents, products){
+  constructor(orderId, orderTime, totalCostCents, products){
+    this.#orderId = orderId;
+    this.#orderTime = orderTime;
     this.#totalCostCents = totalCostCents;
     this.#products = products;
   }
+  
+  static createNewOrder(totalCostCents, products){
+    const orderId = Order.#generateOrderId();
+    const orderTime = dayjs().toISOString();
 
-  #generateOrderId() {
+    return new Order(orderId, orderTime, totalCostCents, products);
+  }
+
+  static fromJSON(data){
+    const orderTime = dayjs(data.orderTime);
+
+    return new Order(data.orderId, orderTime, data.totalCostCents, data.products);
+  }
+
+  toJSON(){
+    return { 
+      orderId: this.#orderId,
+      orderTime: this.#orderTime,
+      totalCostCents: this.#totalCostCents,
+      products: this.#products
+    };
+  }
+
+  static #generateOrderId() {
     if (typeof crypto !== 'undefined' && crypto.randomUUID) {
       return crypto.randomUUID();
     } else {
@@ -46,8 +74,15 @@ export class Order{
       });
     }
   }
-
-  addToOrders(){
-    orders.push(this);
-  }
 };
+
+export function addToOrders(order){
+  if(!order instanceof Order){
+    console.warn('It seems that you are trying to save an invalid order, try again');
+    return;
+  }
+  orders.push(order);
+  ordersSaveStorage();
+};
+
+ordersLoadFromStorage();
