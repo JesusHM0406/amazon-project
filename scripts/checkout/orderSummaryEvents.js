@@ -5,25 +5,36 @@ export function handleUpdateDeliveryOption(option, updateDeliveryFunc = cartModu
   updateDeliveryFunc(productId, deliveryId);
 };
 
-export function showEditingQuantityContainer(productId){
-  cartModule.cartHelpers.toggleIsEditing(productId, true);
+export function showEditingQuantityContainer(
+  productId,
+  toggleFunc = cartModule.cartHelpers.toggleIsEditing
+  ){
+    toggleFunc(productId, true);
 };
 
-export function handleSaveQuantity(link){
+export function handleSaveQuantity(
+  link,
+  removeFunc = cartModule.removeFromCart,
+  updateCartItemQuantityFunc = cartModule.updateCartItemQuantity,
+  toggleFunc = cartModule.cartHelpers.toggleIsEditing
+  ){
   let newQuantity = Number(link.previousElementSibling.value);
 
   if(isNaN(newQuantity) || newQuantity <= 0){
     alert('Attempted to update an item quantity with 0 or a non-number value. Deleting product.');
-    cartModule.removeFromCart(productId);
+    removeFunc(productId);
     return;
   }
 
-  cartModule.updateCartItemQuantity(productId, newQuantity);
+  updateCartItemQuantityFunc(productId, newQuantity);
 
-  cartModule.cartHelpers.toggleIsEditing(productId, false);
+  toggleFunc(productId, false);
 };
 
-export function hanldeDeleteLink(link){
+export function hanldeDeleteLink(
+  link,
+  removeFunc = cartModule.removeFromCart
+  ){
   const { productId } = link.dataset;
-  cartModule.removeFromCart(productId);
+  removeFunc(productId);
 };
