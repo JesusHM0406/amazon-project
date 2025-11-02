@@ -1,5 +1,6 @@
 import { Persistance } from "../../../data/cart.js";
 import { calculateDeliveryDate, deliveryOptions } from "../../../data/deliverOptions.js";
+import * as orderSummaryHTMLModule from "../../../scripts/checkout/orderSummaryHTML.js";
 import * as orderSummaryModule from "../../../scripts/checkout/orderSummary.js";
 
 const TEST_CART = [{ productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryId: '1', isEditing: false }];
@@ -27,7 +28,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = orderSummaryModule.createOrderSummaryHTML();
+    container.innerHTML = orderSummaryHTMLModule.createOrderSummaryHTML();
 
     const dateContainer = document.querySelector('.delivery-date');
 
@@ -40,7 +41,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = orderSummaryModule.createOrderSummaryHTML();
+    container.innerHTML = orderSummaryHTMLModule.createOrderSummaryHTML();
 
     const imageContainer = document.querySelector('.product-image');
     const nameContainer = document.querySelector('.product-name');
@@ -59,7 +60,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = orderSummaryModule.createOrderSummaryHTML();
+    container.innerHTML = orderSummaryHTMLModule.createOrderSummaryHTML();
 
     const productContainer = document.querySelector('.cart-item-container');
 
@@ -72,7 +73,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = orderSummaryModule.createOrderSummaryHTML();
+    container.innerHTML = orderSummaryHTMLModule.createOrderSummaryHTML();
 
     const productContainer = document.querySelector('.cart-item-container');
 
@@ -87,7 +88,7 @@ describe('createOptionsHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = orderSummaryModule.createOptionsHTML('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
+    container.innerHTML = orderSummaryHTMLModule.createOptionsHTML('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
   });
 
   afterEach(()=>{
