@@ -1,4 +1,27 @@
-export const orders = [];
+export let orders = [];
+
+export function ordersLoadFromStorage(){
+  try{
+    let ordersJson = localStorage.getItem('orders');
+
+    if(ordersJson){
+      orders = JSON.parse(ordersJson);
+    } else {
+      orders = [];
+    }
+  } catch(e){
+    console.log('Error: not valid JSON, resetting orders ', e);
+    orders = [];
+  }
+
+  if(!Array.isArray(orders)){
+    orders = [];
+  }
+};
+
+export function ordersSaveStorage(){
+  localStorage.setItem('orders',JSON.stringify(orders));
+};
 
 export class Order{
   #orderId = this.#generateOrderId();
