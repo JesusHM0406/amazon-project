@@ -8,4 +8,4 @@ export function renderAllSections(){
   atachOrderSummaryEventListeners();
 };
 
-// renderAllSections(); Necessary to make the tests work
+renderAllSections();

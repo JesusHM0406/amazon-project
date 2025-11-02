@@ -25,7 +25,7 @@ export function calculateTotalCosts(){
   const totalCents = beforeTaxCents + taxCents;
   const total = formatCurency(totalCents);
 
-  return { priceCents, shippingPriceCents, beforeTaxCents, taxCents, total };
+  return { priceCents, shippingPriceCents, beforeTaxCents, taxCents, totalCents, total };
 };
 
 export function renderPaymentSummary(){
