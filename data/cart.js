@@ -23,6 +23,7 @@ export const Persistance = {
   },
   cleanCart(){
     localStorage.removeItem('cart');
+    this.loadFromStorage();
   }
 };
 

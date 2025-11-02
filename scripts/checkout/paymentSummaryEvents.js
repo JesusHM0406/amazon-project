@@ -5,9 +5,7 @@ import { findDeliveryOption } from "./orderSummary.js";
 import { calculateTotalCosts } from "./paymentSummary.js";
 
 export function createNewOrder(){
-  const emptyArray = [];
-
-  if(cart === emptyArray){
+  if(cart.length === 0){
     return;
   }
 
