@@ -1,16 +1,16 @@
 import { Persistance } from "../../../data/cart.js";
 import { calculateDeliveryDate, deliveryOptions } from "../../../data/deliverOptions.js";
-import { createOptionsHTML, createOrderSummaryHTML, findDeliveryOption } from "../../../scripts/checkout/orderSummary.js";
+import * as orderSummaryModule from "../../../scripts/checkout/orderSummary.js";
 
 const TEST_CART = [{ productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryId: '1', isEditing: false }];
 
 describe('findDeliveryOption',()=>{
   it('returns the option object if the id is valid',()=>{
-    expect(findDeliveryOption('1')).toEqual(deliveryOptions[0]);
+    expect(orderSummaryModule.findDeliveryOption('1')).toEqual(deliveryOptions[0]);
   });
 
   it('returns the default option object if the id is invalid',()=>{
-    expect(findDeliveryOption('5')).toEqual(deliveryOptions[0]);
+    expect(orderSummaryModule.findDeliveryOption('5')).toEqual(deliveryOptions[0]);
   });
 });
 
@@ -27,7 +27,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = createOrderSummaryHTML();
+    container.innerHTML = orderSummaryModule.createOrderSummaryHTML();
 
     const dateContainer = document.querySelector('.delivery-date');
 
@@ -40,7 +40,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = createOrderSummaryHTML();
+    container.innerHTML = orderSummaryModule.createOrderSummaryHTML();
 
     const imageContainer = document.querySelector('.product-image');
     const nameContainer = document.querySelector('.product-name');
@@ -59,7 +59,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = createOrderSummaryHTML();
+    container.innerHTML = orderSummaryModule.createOrderSummaryHTML();
 
     const productContainer = document.querySelector('.cart-item-container');
 
@@ -72,7 +72,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = createOrderSummaryHTML();
+    container.innerHTML = orderSummaryModule.createOrderSummaryHTML();
 
     const productContainer = document.querySelector('.cart-item-container');
 
@@ -87,7 +87,7 @@ describe('createOptionsHTML',()=>{
 
     const container = document.querySelector('.tests-container');
 
-    container.innerHTML = createOptionsHTML('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
+    container.innerHTML = orderSummaryModule.createOptionsHTML('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
   });
 
   afterEach(()=>{
@@ -110,4 +110,4 @@ describe('createOptionsHTML',()=>{
     expect(expectedSelectedOption.querySelector('.delivery-option-input').hasAttribute('checked')).toEqual(true);
     expect(expectedNotSelectedOption2.querySelector('.delivery-option-input').hasAttribute('checked')).toEqual(false);
   });
-})
+});
