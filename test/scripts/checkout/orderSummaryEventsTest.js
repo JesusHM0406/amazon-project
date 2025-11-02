@@ -68,10 +68,30 @@ describe('handleSaveQuantity',()=>{
     expect(toggleFuncSpy).toHaveBeenCalledWith('123', false);
   });
 
-  it('calls updateFunc and toggleFunc with the correct values if the newQuantity is correct',()=>{
+  it('calls removeFunc with the correct id if the newQuantity is NaN',()=>{
     const container = document.querySelector('.tests-container');
     container.innerHTML = `
       <input type="date" value="2025-10-08">
+      <a href="#" class="save-quantity-link">Save</a>
+    `;
+    const link = document.querySelector('.save-quantity-link');
+
+    const updateFuncSpy = jasmine.createSpy('updateCartItemQuantityFunc');
+    const removeFuncSpy = jasmine.createSpy('removeFunc');
+    const toggleFuncSpy = jasmine.createSpy('toggleFunc');
+
+    orderSummaryEventsModule.handleSaveQuantity(link, '123', removeFuncSpy, updateFuncSpy, toggleFuncSpy);
+
+    expect(removeFuncSpy).toHaveBeenCalledTimes(1);
+    expect(removeFuncSpy).toHaveBeenCalledWith('123');
+    expect(updateFuncSpy).not.toHaveBeenCalled();
+    expect(toggleFuncSpy).not.toHaveBeenCalledWith();
+  });
+
+  it('calls removeFunc with the correct id if the newQuantity is 0',()=>{
+    const container = document.querySelector('.tests-container');
+    container.innerHTML = `
+      <input type="number" value="0">
       <a href="#" class="save-quantity-link">Save</a>
     `;
     const link = document.querySelector('.save-quantity-link');
