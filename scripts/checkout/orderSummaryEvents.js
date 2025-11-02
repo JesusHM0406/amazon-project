@@ -1,13 +1,12 @@
-import { cart, cartHelpers, removeFromCart, updateCartItemQuantity, updateDeliveryOption } from "../../data/cart.js";
-import { renderAllSections } from "../checkout.js";
+import * as cartModule from "../../data/cart.js";
 
-export function handleUpdateDeliveryOption(option){
+export function handleUpdateDeliveryOption(option, updateDeliveryFunc = cartModule.updateDeliveryOption){
   const { productId, deliveryId } = option.dataset;
-  updateDeliveryOption(productId, deliveryId);
+  updateDeliveryFunc(productId, deliveryId);
 };
 
 export function showEditingQuantityContainer(productId){
-  cartHelpers.toggleIsEditing(productId, true);
+  cartModule.cartHelpers.toggleIsEditing(productId, true);
 };
 
 export function handleSaveQuantity(link){
@@ -15,16 +14,16 @@ export function handleSaveQuantity(link){
 
   if(isNaN(newQuantity) || newQuantity <= 0){
     alert('Attempted to update an item quantity with 0 or a non-number value. Deleting product.');
-    removeFromCart(productId);
+    cartModule.removeFromCart(productId);
     return;
   }
 
-  updateCartItemQuantity(productId, newQuantity);
+  cartModule.updateCartItemQuantity(productId, newQuantity);
 
-  cartHelpers.toggleIsEditing(productId, false);
+  cartModule.cartHelpers.toggleIsEditing(productId, false);
 };
 
 export function hanldeDeleteLink(link){
   const { productId } = link.dataset;
-  removeFromCart(productId);
+  cartModule.removeFromCart(productId);
 };
