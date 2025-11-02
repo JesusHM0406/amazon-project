@@ -20,6 +20,9 @@ export const Persistance = {
   },
   saveStorage(){
     localStorage.setItem('cart',JSON.stringify(cart));
+  },
+  cleanCart(){
+    localStorage.removeItem('cart');
   }
 };
 
