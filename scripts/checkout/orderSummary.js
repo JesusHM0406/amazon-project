@@ -43,7 +43,7 @@ export function atachOrderSummaryEventListeners(){
         renderAllSections(); // This is to reset the products
         return;
       }
-      handleSaveQuantity(link);
+      handleSaveQuantity(link, productId);
       renderAllSections();
     });
   });

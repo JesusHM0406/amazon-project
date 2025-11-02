@@ -57,7 +57,8 @@ export const cartHelpers = {
     return cart.find(cartItem=>cartItem.productId === productId);
   },
   toggleIsEditing(productId, isEditing){
-    const matchedProduct = this.findItem(productId);
+    const matchedProduct = cartHelpers.findItem(productId);
+    console.log(productId);
     if (matchedProduct){
       matchedProduct.isEditing = isEditing;
     }

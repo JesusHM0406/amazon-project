@@ -14,6 +14,7 @@ export function showEditingQuantityContainer(
 
 export function handleSaveQuantity(
   link,
+  productId,
   removeFunc = cartModule.removeFromCart,
   updateCartItemQuantityFunc = cartModule.updateCartItemQuantity,
   toggleFunc = cartModule.cartHelpers.toggleIsEditing
