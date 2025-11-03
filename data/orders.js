@@ -74,6 +74,22 @@ export class Order{
       });
     }
   }
+
+  get products(){
+    return this.#products;
+  }
+
+  get totalCostCents(){
+    return this.#totalCostCents;
+  }
+
+  get orderTime(){
+    return this.#orderTime.format('MMMM D');
+  }
+
+  get orderId(){
+    return this.#orderId;
+  }
 };
 
 export function addToOrders(order){
