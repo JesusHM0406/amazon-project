@@ -22,7 +22,7 @@ export function handleSaveQuantity(
   let newQuantity = Number(link.previousElementSibling.value);
 
   if(isNaN(newQuantity) || newQuantity <= 0){
-    alert('Attempted to update an item quantity with 0 or a non-number value. Deleting product.');
+    console.warn('Attempted to update an item quantity with 0 or a non-number value. Deleting product.');
     removeFunc(productId);
     return;
   }
