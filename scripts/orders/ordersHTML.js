@@ -3,7 +3,7 @@ import { formatCurency } from "./../utils/money.js";
 import { orders } from "../../data/orders.js";
 import { products } from "../../data/products.js";
 
-export function generateProductHTML(product){
+export function generateProductHTML(product, orderId){
   const matchedProduct = products.find(item => item.id === product.productId);
 
   return `
@@ -22,7 +22,7 @@ export function generateProductHTML(product){
     </div>
 
     <div class="product-actions">
-      <a href="tracking.html">
+      <a href="tracking.html?orderId=${orderId}&id=${product.productId}">
         <button class="track-package-button button-secondary">
           Track package
         </button>
@@ -38,7 +38,7 @@ export function renderOrdersPage(){
     const orderTotal = formatCurency(order.totalCostCents);
     const orderProducts = order.products;
 
-    const productsHTML = orderProducts.map(product => generateProductHTML(product)).join('');
+    const productsHTML = orderProducts.map(product => generateProductHTML(product, order.orderId)).join('');
 
     ordersHTML += `
       <div class="order-container">
