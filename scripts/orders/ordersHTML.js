@@ -15,7 +15,7 @@ export function generateProductHTML(product){
       <div class="product-name">${matchedProduct.name}</div>
       <div class="product-delivery-date">Arriving on: ${product.deliveryDate}</div>
       <div class="product-quantity">Quantity: ${product.quantity}</div>
-      <button class="buy-again-button button-primary">
+      <button class="buy-again-button button-primary" data-product-id="${product.productId}">
         <img class="buy-again-icon" src="images/icons/buy-again.png">
         <span class="buy-again-message">Buy it again</span>
       </button>
@@ -68,9 +68,9 @@ export function renderOrdersPage(){
   });
 
   document.querySelector('.orders-grid').innerHTML = ordersHTML;
-  renderOrderHeader();
+  renderOrdersHeader();
 };
 
-function renderOrderHeader(){
+export function renderOrdersHeader(){
   document.querySelector('.cart-quantity').textContent = calculateCartQuantity()
 };
