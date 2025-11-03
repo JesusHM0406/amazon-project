@@ -218,3 +218,9 @@
     padding: 12px;
   }
 }
+
+.empty-orders-string{
+  text-align: center;
+  font-weight: normal;
+  line-height: 2.2rem;
+}

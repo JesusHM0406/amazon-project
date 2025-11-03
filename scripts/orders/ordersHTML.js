@@ -2,9 +2,14 @@ import { calculateCartQuantity } from "../../data/cart.js";
 import { formatCurency } from "./../utils/money.js";
 import { orders } from "../../data/orders.js";
 import { products } from "../../data/products.js";
+import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 
 export function generateProductHTML(product, orderId){
   const matchedProduct = products.find(item => item.id === product.productId);
+
+  if(!matchedProduct){
+    return '';
+  }
 
   return `
     <div class="product-image-container">
@@ -34,6 +39,14 @@ export function generateProductHTML(product, orderId){
 export function renderOrdersPage(){
   let ordersHTML = '';
 
+  if(orders.length === 0){
+    ordersHTML = `
+      <h2 class="empty-orders-string">There are no pending orders. You can go to the <a href="amazon.html">main page<a> to add new products to your cart and then place a new order <a href="checkout.html">here</a>.</h2>
+    `;
+    document.querySelector('.orders-grid').innerHTML = ordersHTML;
+    return;
+  }
+
   orders.forEach(order =>{;
     const orderTotal = formatCurency(order.totalCostCents);
     const orderProducts = order.products;
@@ -46,7 +59,7 @@ export function renderOrdersPage(){
           <div class="order-header-left-section">
             <div class="order-date">
               <div class="order-header-label">Order Placed:</div>
-              <div>${order.orderTime}</div>
+              <div>${order.orderTime.format('MMMM D')}</div>
             </div>
             <div class="order-total">
               <div class="order-header-label">Total:</div>

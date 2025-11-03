@@ -76,5 +76,6 @@ export function atachPaymentSummaryEventListeners(){
     createNewOrder();
     Persistance.cleanCart();
     renderAllSections();
+    window.location.href = 'orders.html';
   });
 }

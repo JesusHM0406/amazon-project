@@ -84,7 +84,7 @@ export class Order{
   }
 
   get orderTime(){
-    return this.#orderTime.format('MMMM D');
+    return this.#orderTime;
   }
 
   get orderId(){
@@ -93,7 +93,7 @@ export class Order{
 };
 
 export function addToOrders(order){
-  if(!order instanceof Order){
+  if(!(order instanceof Order)){
     console.warn('It seems that you are trying to save an invalid order, try again');
     return;
   }
