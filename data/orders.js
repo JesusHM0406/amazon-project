@@ -92,13 +92,13 @@ export class Order{
   }
 };
 
-export function addToOrders(order){
+export function addToOrders(order, saveFunc = ordersSaveStorage){
   if(!(order instanceof Order)){
     console.warn('It seems that you are trying to save an invalid order, try again');
     return;
   }
   orders.push(order);
-  ordersSaveStorage();
+  saveFunc();
 };
 
 ordersLoadFromStorage();
