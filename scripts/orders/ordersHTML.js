@@ -2,7 +2,6 @@ import { calculateCartQuantity } from "../../data/cart.js";
 import { formatCurency } from "./../utils/money.js";
 import { orders } from "../../data/orders.js";
 import { products } from "../../data/products.js";
-import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 
 export function generateProductHTML(product, orderId){
   const matchedProduct = products.find(item => item.id === product.productId);

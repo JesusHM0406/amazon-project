@@ -2,6 +2,7 @@ import * as ordersModule from "../../data/orders.js";
 import * as cartModule from "../../data/cart.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 import { paymentCreateNewOrder } from "../../scripts/checkout/paymentSummaryEvents.js";
+import { generateProductHTML } from "../../scripts/orders/ordersHTML.js";
 
 describe('ordersLoadFromStorage',()=>{
   it('load the valid data',()=>{
@@ -138,5 +139,24 @@ describe('paymentCreateNewOrder',()=>{
 
     expect(spyCreate).not.toHaveBeenCalled();
     expect(spyAdd).not.toHaveBeenCalled();
+  });
+});
+
+describe('generateProductHTML',()=>{
+  it('returns an string that contains data-product-id with the id of the product and the correct tracking link',()=>{
+    const product = { productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryId: '3', isEditing: false };
+
+    const result = generateProductHTML(product, '123');
+
+    expect(result).toContain('data-product-id="e43638ce-6aa0-4b85-b27f-e1d07eb678c6"');
+    expect(result).toContain('href="tracking.html?orderId=123&id=e43638ce-6aa0-4b85-b27f-e1d07eb678c6"');
+  });
+
+  it('returns an empty string if the product id is inexistent in products',()=>{
+    const product = { productId: 'hello', quantity: 2, deliveryId: '3', isEditing: false };
+
+    const result = generateProductHTML(product, '123');
+
+    expect(result).toEqual('');
   });
 });
