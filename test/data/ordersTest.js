@@ -1,5 +1,7 @@
 import * as ordersModule from "../../data/orders.js";
+import * as cartModule from "../../data/cart.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
+import { paymentCreateNewOrder } from "../../scripts/checkout/paymentSummaryEvents.js";
 
 describe('ordersLoadFromStorage',()=>{
   it('load the valid data',()=>{
@@ -88,5 +90,53 @@ describe('addToOrders',()=>{
 
     expect(ordersModule.orders.length).toEqual(0);
     expect(spy).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('paymentCreateNewOrder',()=>{
+  it('it calls Order.createNewOrder and addToOrders if the context is correct',()=>{
+    jasmine.clock().install();
+    const mockDate = new Date('November 3, 2025');
+    jasmine.clock().mockDate(mockDate);
+
+    spyOn(localStorage, 'setItem');
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryId: '3', isEditing: false },
+      { productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d', quantity: 4, deliveryId: '3', isEditing: false }
+    ]));
+
+    cartModule.Persistance.loadFromStorage();
+
+    const expectedProducts = [
+      { productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryDate: 'Tuesday, November 4' },
+      { productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d', quantity: 4, deliveryDate: 'Tuesday, November 4' }
+    ];
+    let expectedTotal = 10560 + 999 + 999;
+    expectedTotal += expectedTotal * 0.1;
+
+    const spyCreate = jasmine.createSpy('createNewOrder');
+    const spyAdd = jasmine.createSpy('addToOrders');
+
+    paymentCreateNewOrder(spyCreate, spyAdd);
+
+    expect(spyCreate).toHaveBeenCalledWith(expectedTotal, expectedProducts);
+    expect(spyAdd).toHaveBeenCalledTimes(1);
+
+    jasmine.clock().uninstall();
+  });
+
+  it('it doesn\'t calls Order.createNewOrder and addToOrders if the cart is empty',()=>{
+    spyOn(localStorage, 'setItem');
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([]));
+
+    cartModule.Persistance.loadFromStorage();
+
+    const spyCreate = jasmine.createSpy('createNewOrder');
+    const spyAdd = jasmine.createSpy('addToOrders');
+
+    paymentCreateNewOrder(spyCreate, spyAdd);
+
+    expect(spyCreate).not.toHaveBeenCalled();
+    expect(spyAdd).not.toHaveBeenCalled();
   });
 });

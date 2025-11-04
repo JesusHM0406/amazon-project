@@ -4,7 +4,7 @@ import { Order, addToOrders } from "../../data/orders.js";
 import { findDeliveryOption } from "./orderSummary.js";
 import { calculateTotalCosts } from "./paymentSummary.js";
 
-export function paymentCreateNewOrder(){
+export function paymentCreateNewOrder(createFunc = Order.createNewOrder, addFunc = addToOrders){
   if(cart.length === 0){
     return;
   }
@@ -18,7 +18,7 @@ export function paymentCreateNewOrder(){
 
   const { totalCents } = calculateTotalCosts();
 
-  const newOrder = Order.createNewOrder(totalCents, products);
+  const newOrder = createFunc(totalCents, products);
 
-  addToOrders(newOrder);
+  addFunc(newOrder);
 };
