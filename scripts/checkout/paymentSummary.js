@@ -3,7 +3,7 @@ import { deliveryOptions } from "../../data/deliverOptions.js";
 import { products } from "../../data/products.js";
 import { renderAllSections } from "../checkout.js";
 import { formatCurency } from "../utils/money.js";
-import { createNewOrder } from "./paymentSummaryEvents.js";
+import { paymentCreateNewOrder } from "./paymentSummaryEvents.js";
 
 export function calculateTotalCosts(){
   let priceCents = 0;
@@ -73,7 +73,7 @@ export function renderPaymentSummary(){
 
 export function atachPaymentSummaryEventListeners(){
   document.querySelector('.place-order-button').addEventListener('click',()=>{
-    createNewOrder();
+    paymentCreateNewOrder();
     Persistance.cleanCart();
     renderAllSections();
     window.location.href = 'orders.html';
