@@ -46,3 +46,12 @@ describe('createNewOrder',()=>{
     expect(newOrder.orderTime instanceof dayjs).toEqual(true);
   });
 });
+
+describe('fromJSON',()=>{
+  it('returns an instance of Order class and orderTime as an instance of Dayjs',()=>{
+    const data = { orderId:'123', orderTime: 'December 15', totalCostCents: 5050, products:{ productId: '123', quantity:1, deliveryDate: 'December 15' } }
+  
+  expect(ordersModule.Order.fromJSON(data) instanceof ordersModule.Order).toEqual(true);
+  expect(ordersModule.Order.fromJSON(data).orderTime instanceof dayjs).toEqual(true);
+  });
+});
