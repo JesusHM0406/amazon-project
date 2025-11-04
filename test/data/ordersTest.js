@@ -17,7 +17,6 @@ describe('ordersLoadFromStorage',()=>{
     ]));
 
     ordersModule.ordersLoadFromStorage();
-    console.log(ordersModule.orders[0]);
 
     expect(ordersModule.orders.length).toEqual(1);
     expect(ordersModule.orders[0] instanceof ordersModule.Order).toEqual(true);
@@ -34,5 +33,16 @@ describe('ordersLoadFromStorage',()=>{
 
     expect(ordersModule.orders.length).toEqual(0);
     expect(ordersModule.orders).toEqual([]);
+  });
+});
+
+describe('createNewOrder',()=>{
+  it('returns a new order with an orderId as string and an orderTime as an Dayjs object', ()=>{
+    const newOrder = ordersModule.Order.createNewOrder(5050, [{productId: '123', quantity:1, deliveryDate: 'December 15'}]);
+
+    expect(typeof newOrder.orderId).toEqual('string');
+    expect(newOrder.orderId.trim().length).toEqual(36);
+
+    expect(newOrder.orderTime instanceof dayjs).toEqual(true);
   });
 });

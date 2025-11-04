@@ -42,7 +42,7 @@ export class Order{
   
   static createNewOrder(totalCostCents, products){
     const orderId = Order.#generateOrderId();
-    const orderTime = dayjs().toISOString();
+    const orderTime = dayjs();
 
     return new Order(orderId, orderTime, totalCostCents, products);
   }
@@ -56,7 +56,7 @@ export class Order{
   toJSON(){
     return { 
       orderId: this.#orderId,
-      orderTime: this.#orderTime,
+      orderTime: this.#orderTime.toISOString(),
       totalCostCents: this.#totalCostCents,
       products: this.#products
     };
