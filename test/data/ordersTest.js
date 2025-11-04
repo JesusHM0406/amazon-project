@@ -55,3 +55,37 @@ describe('fromJSON',()=>{
   expect(ordersModule.Order.fromJSON(data).orderTime instanceof dayjs).toEqual(true);
   });
 });
+
+describe('addToOrders',()=>{
+  it('add a new order to orders array and calls ordersSaveStorage',()=>{
+    spyOn(localStorage, 'setItem');
+    spyOn(ordersModule, 'ordersSaveStorage');
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([]));
+    ordersModule.ordersLoadFromStorage();
+
+    expect(ordersModule.orders.length).toEqual(0);
+
+    const newOrder = ordersModule.Order.createNewOrder(5050, [{productId: '123', quantity:1, deliveryDate: 'December 15'}]);
+
+    ordersModule.addToOrders(newOrder);
+
+    expect(ordersModule.orders.length).toEqual(1);
+    expect(ordersModule.ordersSaveStorage).toHaveBeenCalledTimes(1);
+  });
+
+  it('doesn\'t add the order if is not an instance of Order class',()=>{
+    spyOn(localStorage, 'setItem');
+    spyOn(ordersModule, 'ordersSaveStorage');
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([]));
+    ordersModule.ordersLoadFromStorage();
+
+    expect(ordersModule.orders.length).toEqual(0);
+
+    const newOrder = [ '123', 'December 15', 5050, [{productId: '123', quantity:1, deliveryDate: 'December 15'}]];
+
+    ordersModule.addToOrders(newOrder);
+
+    expect(ordersModule.orders.length).toEqual(0);
+    expect(ordersModule.ordersSaveStorage).toHaveBeenCalledTimes(0);
+  });
+});
