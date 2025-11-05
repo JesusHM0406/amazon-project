@@ -35,7 +35,7 @@ export function generateProductHTML(product, orderId){
   `;
 }
 
-export function renderOrdersPage(){
+export function renderOrdersPage(generateFunc = generateProductHTML){
   let ordersHTML = '';
 
   if(orders.length === 0){
@@ -50,7 +50,7 @@ export function renderOrdersPage(){
     const orderTotal = formatCurency(order.totalCostCents);
     const orderProducts = order.products;
 
-    const productsHTML = orderProducts.map(product => generateProductHTML(product, order.orderId)).join('');
+    const productsHTML = orderProducts.map(product => generateFunc(product, order.orderId)).join('');
 
     ordersHTML += `
       <div class="order-container">

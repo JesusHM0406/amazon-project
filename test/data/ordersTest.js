@@ -2,7 +2,7 @@ import * as ordersModule from "../../data/orders.js";
 import * as cartModule from "../../data/cart.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 import { paymentCreateNewOrder } from "../../scripts/checkout/paymentSummaryEvents.js";
-import { generateProductHTML } from "../../scripts/orders/ordersHTML.js";
+import { generateProductHTML, renderOrdersPage } from "../../scripts/orders/ordersHTML.js";
 
 describe('ordersLoadFromStorage',()=>{
   it('load the valid data',()=>{
@@ -158,5 +158,52 @@ describe('generateProductHTML',()=>{
     const result = generateProductHTML(product, '123');
 
     expect(result).toEqual('');
+  });
+});
+
+describe('renderOrdersPage',()=>{
+  it('calls generateProductHTML for every order',()=>{
+    const mockOrderTime = dayjs().toISOString();
+
+    document.querySelector('.tests-container').innerHTML = `
+      <div class="orders-grid"></div>
+      <div class="cart-quantity"></div>
+    `;
+
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { orderId: '133',
+        orderTime: mockOrderTime,
+        totalCostCents: 5050,
+        products: [
+          { productId: '234', quantity: 2, deliveryDate: 'December 15' }
+        ]
+      },
+      { orderId: '231',
+        orderTime: mockOrderTime,
+        totalCostCents: 1050,
+        products: [
+          { productId: '354', quantity: 5, deliveryDate: 'December 16' }
+        ]
+      },
+      { orderId: '678',
+        orderTime: mockOrderTime,
+        totalCostCents: 4020,
+        products: [
+          { productId: '234', quantity: 1, deliveryDate: 'December 17' }
+        ]
+      }
+    ]));
+
+    ordersModule.ordersLoadFromStorage();
+
+    const spy = jasmine.createSpy('generateProductsHTML');
+
+    renderOrdersPage(spy);
+
+    expect(spy).toHaveBeenCalledTimes(3);
+    expect(document.querySelector('.order-container')).not.toEqual(null);
+    expect(document.querySelectorAll('.order-container').length).toEqual(3);
+  
+    document.querySelector('.tests-container').innerHTML = '';
   });
 });
