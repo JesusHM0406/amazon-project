@@ -9,7 +9,7 @@ export const deliveryOptions = [
 export function isWeekend(date){
   const dateFormated = date.format('dddd');
   return dateFormated === 'Sunday' || dateFormated === 'Saturday';
-}
+};
 
 export function calculateDeliveryDate(option){
   let deliveryDate = dayjs();
@@ -20,5 +20,5 @@ export function calculateDeliveryDate(option){
     if (!isWeekend(deliveryDate)) remainingWorkDays--;
   }
 
-  return deliveryDate.format('dddd, MMMM D');
-}
+  return deliveryDate.format('YYYY, dddd MMMM D');
+};
