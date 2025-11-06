@@ -27,7 +27,7 @@ export function generateProductHTML(product, orderId){
 
     <div class="product-actions">
       <a href="tracking.html?orderId=${orderId}&id=${product.productId}">
-        <button class="track-package-button button-secondary">
+        <button class="track-package-button button-secondary"  data-order-id="${orderId}" data-product-id="${product.productId}">
           Track package
         </button>
       </a>

@@ -4,13 +4,21 @@ import { products } from "../../data/products.js";
 export function genereateTrackingHTML(orderId, productId){
   const orderMatched = orders.find(order => order.orderId === orderId);
   
-  if(!orderMatched) return 'Sorry, the order doesn\'t exists, verify the URL';
+  if(!orderMatched) return `
+    <a class="back-to-orders-link link-primary" href="orders.html">
+      View all orders
+    </a>
+    <div>Sorry, the order doesn't exists, verify the URL</div>`;
   
   const matchedProduct = orderMatched.products.find(product => product.productId === productId);
 
   const productExists = products.find(product => product.id === productId);
 
-  if(!matchedProduct || !productExists) return 'Sorry, the product doesn\'t exists in any order, verify the URL';
+  if(!matchedProduct || !productExists) return `
+    <a class="back-to-orders-link link-primary" href="orders.html">
+      View all orders
+    </a>
+    <div>Sorry, the product doesn't exists in any order, verify the URL</div>`;
 
   return `
     <div class="order-tracking">
@@ -27,7 +35,7 @@ export function genereateTrackingHTML(orderId, productId){
       </div>
 
       <div class="product-info">
-        ${matchedProduct.quantity}
+        Quantity: ${matchedProduct.quantity}
       </div>
 
       <img class="product-image" src="${productExists.image}">

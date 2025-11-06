@@ -21,4 +21,10 @@ export function atachOrdersEvents(){
       handleBuyAgainEvent(productId);
     });
   });
+
+  document.querySelectorAll('.track-package-button').forEach(btn => {
+    btn.addEventListener('click',()=>{
+      window.location.href = 'tracking.html';
+    });
+  });
 };
