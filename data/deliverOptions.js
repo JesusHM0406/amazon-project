@@ -20,5 +20,7 @@ export function calculateDeliveryDate(option){
     if (!isWeekend(deliveryDate)) remainingWorkDays--;
   }
 
-  return deliveryDate.format('YYYY, dddd MMMM D');
+  const deliveryDateFormated = deliveryDate.format('dddd MMMM D');
+
+  return { deliveryDate, deliveryDateFormated };
 };
