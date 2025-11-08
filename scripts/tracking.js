@@ -1,16 +1,41 @@
 import { calculateCartQuantity } from "../data/cart.js";
 import { genereateTrackingHTML, renderProgressBar } from "./tracking/trackingHTML.js";
+import { orders, removeOrder } from "../data/orders.js";
+import { products } from "../data/products.js";
+import { calculateDeliveryProgress } from "./tracking/trackingUtils.js";
 
-const thisURL = new URL(window.location.href);
-const params = new URLSearchParams(thisURL.search);
-const orderId = params.get('orderId');
-const productId = params.get('id');
+function renderTrackingPage(){
+  const thisURL = new URL(window.location.href);
+  const params = new URLSearchParams(thisURL.search);
+  const orderId = params.get('orderId');
+  const productId = params.get('id');
 
-function renderTrackingPage(orderId, productId){
+  const order = orders.find(order => order.orderId === orderId);
+  
+  if(!order) {
+    window.location.href = 'orders.html';
+    return;
+  };
+
+  const matchedProduct = order.products.find(product => product.productId === productId);
+  const productExists = products.find(product => product.id === productId);
+  
+  if(!matchedProduct || !productExists) {
+    window.location.href = 'orders.html';
+    return;
+  };
+
+  const progress = calculateDeliveryProgress(order.orderTime, matchedProduct.deliveryDate);
+
+  if(progress === 100){
+    removeOrder(orderId);
+    return;
+  };
+
   document.querySelector('.main').innerHTML = genereateTrackingHTML(orderId, productId);
 };
 
 document.querySelector('.cart-quantity').textContent = calculateCartQuantity();
 
-renderTrackingPage(orderId, productId);
+renderTrackingPage();
 renderProgressBar();

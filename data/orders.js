@@ -101,4 +101,9 @@ export function addToOrders(order, saveFunc = ordersSaveStorage){
   saveFunc();
 };
 
+export function removeOrder(orderId, saveFunc = ordersSaveStorage){
+  orders.filter(order => order.orderId !== orderId);
+  saveFunc()
+};
+
 ordersLoadFromStorage();
