@@ -1,5 +1,5 @@
 import { calculateCartQuantity } from "../data/cart.js";
-import { genereateTrackingHTML } from "./tracking/trackingHTML.js";
+import { genereateTrackingHTML, renderProgressBar } from "./tracking/trackingHTML.js";
 
 const thisURL = new URL(window.location.href);
 const params = new URLSearchParams(thisURL.search);
@@ -13,3 +13,4 @@ function renderTrackingPage(orderId, productId){
 document.querySelector('.cart-quantity').textContent = calculateCartQuantity();
 
 renderTrackingPage(orderId, productId);
+renderProgressBar();

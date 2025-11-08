@@ -65,3 +65,21 @@ export function genereateTrackingHTML(orderId, productId){
     </div>
   `;
 };
+
+export function renderProgressBar(){
+  const progressBar = document.querySelector('.progress-bar');
+  const { progress } = progressBar.dataset;
+
+  const progressLabels = document.querySelectorAll('.progress-label');
+  progressLabels.forEach(elem => elem.classList.remove('current-status'));
+
+  progressBar.style.width = `${progress}%`;
+
+  if(progress < 33){
+    progressLabels[0].classList.add('current-status');
+  } else if(progress < 66){
+    progressLabels[1].classList.add('current-status');
+  } else {
+    progressLabels[2].classList.add('current-status');
+  }
+};
