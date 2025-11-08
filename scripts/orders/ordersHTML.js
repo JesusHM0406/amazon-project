@@ -2,6 +2,7 @@ import { calculateCartQuantity } from "../../data/cart.js";
 import { formatCurency } from "./../utils/money.js";
 import { orders } from "../../data/orders.js";
 import { products } from "../../data/products.js";
+import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 
 export function generateProductHTML(product, orderId){
   const matchedProduct = products.find(item => item.id === product.productId);
@@ -10,6 +11,10 @@ export function generateProductHTML(product, orderId){
     return '';
   }
 
+  const deliveryDateObj = dayjs(product.deliveryDate);
+
+  const deliveryDate = deliveryDateObj.format('dddd, MMMM D');
+
   return `
     <div class="product-image-container">
       <img src="${matchedProduct.image}">
@@ -17,7 +22,7 @@ export function generateProductHTML(product, orderId){
 
     <div class="product-details">
       <div class="product-name">${matchedProduct.name}</div>
-      <div class="product-delivery-date">Arriving on: ${product.deliveryDate}</div>
+      <div class="product-delivery-date">Arriving on: ${deliveryDate}</div>
       <div class="product-quantity">Quantity: ${product.quantity}</div>
       <button class="buy-again-button button-primary" data-product-id="${product.productId}">
         <img class="buy-again-icon" src="images/icons/buy-again.png">

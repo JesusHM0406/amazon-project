@@ -4,11 +4,11 @@ export function calculateDeliveryProgress( orderTime, deliveryDate, dayjsFunc = 
     const deliveryTime = dayjsFunc(deliveryDate);
     const orderTimeObj = dayjsFunc(orderTime);
 
-    const currentTime = dayjsFunc(); 
+    const currentTime = dayjsFunc();
 
-    const totalDuration = deliveryTime.diff(orderTimeObj, 'days');
+    const totalDuration = deliveryTime.diff(orderTimeObj, 'minutes');
 
-    const timeElapsed = currentTime.diff(orderTimeObj, 'days');
+    const timeElapsed = currentTime.diff(orderTimeObj, 'minutes');
 
     if (totalDuration <= 0) return 100;
     if (timeElapsed <= 0) return 0;

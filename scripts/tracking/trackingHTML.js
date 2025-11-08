@@ -1,5 +1,7 @@
 import { orders } from "../../data/orders.js";
 import { products } from "../../data/products.js";
+import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
+import { calculateDeliveryProgress } from "./trackingUtils.js";
 
 export function genereateTrackingHTML(orderId, productId){
   const orderMatched = orders.find(order => order.orderId === orderId);
@@ -20,6 +22,11 @@ export function genereateTrackingHTML(orderId, productId){
     </a>
     <div>Sorry, the product doesn't exists in any order, verify the URL</div>`;
 
+  const deliveryDateObj = dayjs(matchedProduct.deliveryDate);
+  const deliveryDate = deliveryDateObj.format('dddd, MMMM D');
+
+  const progress = calculateDeliveryProgress(orderMatched.orderTime, matchedProduct.deliveryDate);
+
   return `
     <div class="order-tracking">
       <a class="back-to-orders-link link-primary" href="orders.html">
@@ -27,7 +34,7 @@ export function genereateTrackingHTML(orderId, productId){
       </a>
 
       <div class="delivery-date">
-        ${matchedProduct.deliveryDate}
+        ${deliveryDate}
       </div>
 
       <div class="product-info">
@@ -53,7 +60,7 @@ export function genereateTrackingHTML(orderId, productId){
       </div>
 
       <div class="progress-bar-container">
-        <div class="progress-bar"></div>
+        <div class="progress-bar" data-progress="${progress}"></div>
       </div>
     </div>
   `;

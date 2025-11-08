@@ -11,10 +11,15 @@ export function paymentCreateNewOrder(createFunc = Order.createNewOrder, addFunc
 
   const products = cart.map(product => {
     const matchedOption = findDeliveryOption(product.deliveryId);
-    const deliveryDate = calculateDeliveryDate(matchedOption);
+    const { deliveryDate } = calculateDeliveryDate(matchedOption);
+
+    console.log(calculateDeliveryDate(matchedOption));
+    console.log(deliveryDate);
 
     return { productId: product.productId, quantity: product.quantity, deliveryDate };
   });
+
+  console.log(products[0].deliveryDate);
 
   const { totalCents } = calculateTotalCosts();
 

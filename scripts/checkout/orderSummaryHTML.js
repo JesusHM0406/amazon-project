@@ -17,11 +17,11 @@ export function createOrderSummaryHTML(){
 
     const { deliveryId } = cartItem; 
     const deliveryOption = findDeliveryOption(deliveryId);
-    let deliveryDate = calculateDeliveryDate(deliveryOption);
+    let { deliveryDateFormated } = calculateDeliveryDate(deliveryOption);
 
     orderSummaryHTML += `
       <div class="cart-item-container ${cartItem.isEditing ? 'is-editing' : ''}">
-        <div class="delivery-date">Delivery date: ${deliveryDate}</div>
+        <div class="delivery-date">Delivery date: ${deliveryDateFormated}</div>
 
         <div class="cart-item-details-grid">
           <img class="product-image" src="${matchedProduct.image}">
@@ -67,7 +67,7 @@ export function createOptionsHTML(productId){
     const matchedProduct = cart.find(cartItem => cartItem.productId === productId);
 
     if(matchedProduct){
-      let deliveryDate = calculateDeliveryDate(option);
+      let { deliveryDateFormated } = calculateDeliveryDate(option);
       const matchedOption = matchedProduct.deliveryId;
       const priceString = option.priceCents === 0 ? 'FREE' : `$${option.priceCents / 100} -`;
 
@@ -76,7 +76,7 @@ export function createOptionsHTML(productId){
         <input type="radio" ${matchedOption === option.id ? 'checked' : ''} class="delivery-option-input" name="delivery-option-${productId}">
 
         <div>
-          <div class="delivery-option-date">${deliveryDate}</div>
+          <div class="delivery-option-date">${deliveryDateFormated}</div>
           <div class="delivery-option-price">${priceString} Shipping</div>
         </div>
       </div>
