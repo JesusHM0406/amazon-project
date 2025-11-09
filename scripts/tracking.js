@@ -1,6 +1,6 @@
 import { calculateCartQuantity } from "../data/cart.js";
 import { genereateTrackingHTML, renderProgressBar } from "./tracking/trackingHTML.js";
-import { orders, removeOrder } from "../data/orders.js";
+import { orders, removeProductFromOrder } from "../data/orders.js";
 import { products } from "../data/products.js";
 import { calculateDeliveryProgress } from "./tracking/trackingUtils.js";
 
@@ -28,7 +28,8 @@ function renderTrackingPage(){
   const progress = calculateDeliveryProgress(order.orderTime, matchedProduct.deliveryDate);
 
   if(progress === 100){
-    removeOrder(orderId);
+    removeProductFromOrder(orderId, productId);
+    window.location.href = 'orders.html';
     return;
   };
 

@@ -101,9 +101,18 @@ export function addToOrders(order, saveFunc = ordersSaveStorage){
   saveFunc();
 };
 
-export function removeOrder(orderId, saveFunc = ordersSaveStorage){
-  orders = orders.filter(order => order.orderId !== orderId);
-  saveFunc()
+export function removeProductFromOrder(orderId, productId, saveFunc = ordersSaveStorage){
+  const order = orders.find(ordersItem => ordersItem.orderId === orderId );
+  
+  if(!order) return;
+
+  order.products = order.products.filter(product => product.productId !== productId);
+
+  if(order.products === 0){
+    orders = orders.filter(ordersItem => ordersItem.orderId !== orderId);
+  };
+
+  saveFunc();
 };
 
 ordersLoadFromStorage();
