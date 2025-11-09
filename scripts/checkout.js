@@ -9,4 +9,4 @@ export function renderAllSections(){
   atachOrderSummaryEventListeners();
 };
 
-renderAllSections();
+// renderAllSections();
