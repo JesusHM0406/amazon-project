@@ -90,6 +90,10 @@ export class Order{
   get orderId(){
     return this.#orderId;
   }
+
+  set setProducts(products){
+    this.#products = products;
+  }
 };
 
 export function addToOrders(order, saveFunc = ordersSaveStorage){
@@ -106,9 +110,10 @@ export function removeProductFromOrder(orderId, productId, saveFunc = ordersSave
   
   if(!order) return;
 
-  order.products = order.products.filter(product => product.productId !== productId);
+  const newProducts = order.products.filter(product => product.productId !== productId);
+  order.setProducts = newProducts;
 
-  if(order.products === 0){
+  if(order.products.length === 0){
     orders = orders.filter(ordersItem => ordersItem.orderId !== orderId);
   };
 

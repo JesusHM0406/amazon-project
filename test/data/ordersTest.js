@@ -208,7 +208,7 @@ describe('renderOrdersPage',()=>{
   });
 });
 
-describe('removeOrder',()=>{
+describe('removeProductFromOrder',()=>{
   beforeEach(()=>{
     const mockOrderTime = dayjs().toISOString();
 
@@ -234,7 +234,7 @@ describe('removeOrder',()=>{
   it('removes an order of the array',()=>{
     const spy = jasmine.createSpy('saveFunc');
 
-    ordersModule.removeOrder('133', spy);
+    ordersModule.removeProductFromOrder('133', '234', spy);
 
     expect(ordersModule.orders.length).toEqual(1);
     expect(ordersModule.orders[0].orderId).toEqual('456');
@@ -244,7 +244,7 @@ describe('removeOrder',()=>{
   it('removes an order of the array',()=>{
     const spy = jasmine.createSpy('saveFunc');
 
-    ordersModule.removeOrder('167', spy);
+    ordersModule.removeProductFromOrder('167', 'hello' ,spy);
 
     expect(ordersModule.orders.length).toEqual(2);
     expect(ordersModule.orders[0].orderId).toEqual('133');
