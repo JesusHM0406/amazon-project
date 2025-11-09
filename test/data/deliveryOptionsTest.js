@@ -57,7 +57,8 @@ describe('calculateDeliveryDate',()=>{
     const fixedDate = new Date('January 21, 2025');
     jasmine.clock().mockDate(fixedDate);
 
-    expect(calculateDeliveryDate(deliveryOptions[2])).toEqual('Wednesday, January 22');
+    expect(calculateDeliveryDate(deliveryOptions[2]).deliveryDate instanceof dayjs).toEqual(true);
+    expect(calculateDeliveryDate(deliveryOptions[2]).deliveryDateFormated).toEqual('Wednesday January 22');
   });
 
   it('skips the weekend if its friday',()=>{
@@ -65,7 +66,8 @@ describe('calculateDeliveryDate',()=>{
     const fixedDate = new Date('January 24, 2025');
     jasmine.clock().mockDate(fixedDate);
 
-    expect(calculateDeliveryDate(deliveryOptions[2])).toEqual('Monday, January 27');
+    expect(calculateDeliveryDate(deliveryOptions[2]).deliveryDate instanceof dayjs).toEqual(true);
+    expect(calculateDeliveryDate(deliveryOptions[2]).deliveryDateFormated).toEqual('Monday January 27');
   });
 
   it('skips the weekend if the option is 1 (7 days) and is monday',()=>{
@@ -74,7 +76,8 @@ describe('calculateDeliveryDate',()=>{
     jasmine.clock().mockDate(fixedDate);
 
     // 9 Days after
-    expect(calculateDeliveryDate(deliveryOptions[0])).toEqual('Wednesday, January 29');
+    expect(calculateDeliveryDate(deliveryOptions[0]).deliveryDate instanceof dayjs).toEqual(true);
+    expect(calculateDeliveryDate(deliveryOptions[0]).deliveryDateFormated).toEqual('Wednesday January 29');
   });
 
   it('skips the weekend if the option is 2 (3 days) and is thursday',()=>{
@@ -83,6 +86,7 @@ describe('calculateDeliveryDate',()=>{
     jasmine.clock().mockDate(fixedDate);
 
     // 5 Days after
-    expect(calculateDeliveryDate(deliveryOptions[1])).toEqual('Tuesday, January 28');
+    expect(calculateDeliveryDate(deliveryOptions[0]).deliveryDate instanceof dayjs).toEqual(true);
+    expect(calculateDeliveryDate(deliveryOptions[1]).deliveryDateFormated).toEqual('Tuesday January 28');
   });
 });
