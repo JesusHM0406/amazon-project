@@ -207,3 +207,47 @@ describe('renderOrdersPage',()=>{
     document.querySelector('.tests-container').innerHTML = '';
   });
 });
+
+describe('removeOrder',()=>{
+  beforeEach(()=>{
+    const mockOrderTime = dayjs().toISOString();
+
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify([
+      { orderId: '133',
+        orderTime: mockOrderTime,
+        totalCostCents: 5050,
+        products: [
+          { productId: '234', quantity: 2, deliveryDate: 'December 15' }
+        ]
+      }, 
+      { orderId: '456',
+        orderTime: mockOrderTime,
+        totalCostCents: 4050,
+        products: [
+          { productId: '542', quantity: 1, deliveryDate: 'December 11' }
+        ]
+      }
+    ]));
+    ordersModule.ordersLoadFromStorage();
+  });
+
+  it('removes an order of the array',()=>{
+    const spy = jasmine.createSpy('saveFunc');
+
+    ordersModule.removeOrder('133', spy);
+
+    expect(ordersModule.orders.length).toEqual(1);
+    expect(ordersModule.orders[0].orderId).toEqual('456');
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  it('removes an order of the array',()=>{
+    const spy = jasmine.createSpy('saveFunc');
+
+    ordersModule.removeOrder('167', spy);
+
+    expect(ordersModule.orders.length).toEqual(2);
+    expect(ordersModule.orders[0].orderId).toEqual('133');
+    expect(ordersModule.orders[1].orderId).toEqual('456');
+  });
+});
