@@ -16,8 +16,6 @@ export function paymentCreateNewOrder(createFunc = Order.createNewOrder, addFunc
     return { productId: product.productId, quantity: product.quantity, deliveryDate: deliveryDate.toISOString() };
   });
 
-  console.log(products[0].deliveryDate);
-
   const { totalCents } = calculateTotalCosts();
 
   const newOrder = createFunc(totalCents, products);
