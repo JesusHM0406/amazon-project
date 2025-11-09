@@ -112,3 +112,6 @@ describe('createOptionsHTML',()=>{
     expect(expectedNotSelectedOption2.querySelector('.delivery-option-input').hasAttribute('checked')).toEqual(false);
   });
 });
+
+document.querySelector('.return-to-home-link').remove();
+document.querySelector('.order-summary').remove();

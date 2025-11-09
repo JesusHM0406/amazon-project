@@ -40,4 +40,6 @@ describe('calculateTotalCosts',()=>{
 
     expect(objectCosts).toEqual({ priceCents: 0, shippingPriceCents: 0, beforeTaxCents: 0, taxCents: 0, totalCents: 0,total: '0.00' });
   });
+
+  document.querySelector('.payment-summary').remove();
 });
