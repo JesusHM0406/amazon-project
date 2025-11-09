@@ -109,8 +109,8 @@ describe('paymentCreateNewOrder',()=>{
     cartModule.Persistance.loadFromStorage();
 
     const expectedProducts = [
-      { productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryDate: 'Tuesday, November 4' },
-      { productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d', quantity: 4, deliveryDate: 'Tuesday, November 4' }
+      { productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', quantity: 2, deliveryDate: '2025-11-04T06:00:00.000Z' },
+      { productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d', quantity: 4, deliveryDate: '2025-11-04T06:00:00.000Z' }
     ];
     let expectedTotal = 10560 + 999 + 999;
     expectedTotal += expectedTotal * 0.1;

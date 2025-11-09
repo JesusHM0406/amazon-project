@@ -13,10 +13,7 @@ export function paymentCreateNewOrder(createFunc = Order.createNewOrder, addFunc
     const matchedOption = findDeliveryOption(product.deliveryId);
     const { deliveryDate } = calculateDeliveryDate(matchedOption);
 
-    console.log(calculateDeliveryDate(matchedOption));
-    console.log(deliveryDate);
-
-    return { productId: product.productId, quantity: product.quantity, deliveryDate };
+    return { productId: product.productId, quantity: product.quantity, deliveryDate: deliveryDate.toISOString() };
   });
 
   console.log(products[0].deliveryDate);
