@@ -24,7 +24,7 @@ describe('createOrderSummaryHTML',()=>{
     spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(TEST_CART));
     Persistance.loadFromStorage();
 
-    const deliveryDate = calculateDeliveryDate({id: '1', priceCents: 0, days: 7});
+    const { deliveryDateFormated } = calculateDeliveryDate({id: '1', priceCents: 0, days: 7});
 
     const container = document.querySelector('.tests-container');
 
@@ -32,7 +32,7 @@ describe('createOrderSummaryHTML',()=>{
 
     const dateContainer = document.querySelector('.delivery-date');
 
-    expect(dateContainer.textContent).toContain(deliveryDate);
+    expect(dateContainer.textContent).toContain(deliveryDateFormated);
   });
 
   it('shows the correct data of the product',()=>{
