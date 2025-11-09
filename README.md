@@ -12,8 +12,8 @@ This project is the result of the JavaScript course of **SuperSimpleDev**.
 ## Screenshots
 
 ![Amazon main page](./screenshots/amazon.png)
-![Checkout page, orders section](./screenshots/ordersummary.png)
-![Checkout page, payment section](./screenshots/paymentsummary.png)
+![Checkout page, orders section](./screenshots/orderSummary.png)
+![Checkout page, payment section](./screenshots/paymentSummary.png)
 ![Orders page](./screenshots/orders.png)
 ![Traking page](./screenshots/tracking.png)
 
